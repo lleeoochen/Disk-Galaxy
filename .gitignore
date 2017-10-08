@@ -1,5 +1,8 @@
 RPG-2D-1.VC.VC.opendb
-
+RPG-2D-1/Debug/
+.*
+Debug/
+RPG-2D-1.VC.db
 
 
 
