@@ -1,11 +1,13 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
+#include "Player.h"
 
 const float SPEED = 0.5;
 const int WIDTH = 960;
 const int HEIGHT = 540;
 void handleMovement(sf::Sprite& player);
+sf::Texture getTexture(std::string filename);
 
 //Game driver
 int main() {
@@ -13,22 +15,17 @@ int main() {
 	//Setup window
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Galaxy Game!", sf::Style::Titlebar | sf::Style::Default);
 
+	//Setup textures
+	sf::Texture textureUFO = getTexture("ufo.png");
+	sf::Texture textureGalaxy = getTexture("galaxy.png");
+
 	//Setup background
-	sf::Texture textureBackground;
-	if (!textureBackground.loadFromFile("galaxy.png"))
-		std::cerr << "galaxy.png not found" << std::endl;
-	textureBackground.setSmooth(true);
-	sf::Sprite background(textureBackground);
+	Player background(textureGalaxy);
 
 	//Setup player
-	sf::Texture texturePlayer;
-	if (!texturePlayer.loadFromFile("ufo.png"))
-		std::cerr << "ufo.png not found" << std::endl;
-	texturePlayer.setSmooth(true);
-	sf::Sprite player(texturePlayer);
-	player.setOrigin(player.getGlobalBounds().width / 2, player.getGlobalBounds().height / 2);
-	player.setPosition(WIDTH / 2, HEIGHT - player.getGlobalBounds().height / 2);
-
+	Player player(textureUFO);
+	player.setOrigin(player.getWidth() / 2, player.getHeight() / 2);
+	player.setPosition(WIDTH / 2, HEIGHT - player.getHeight() / 2);
 
 	//Game loop
 	while (window.isOpen()) {
@@ -73,4 +70,11 @@ void handleMovement(sf::Sprite& player) {
 
 	//Move players
 	player.move(velocity);
+}
+
+//Get texture from file
+sf::Texture getTexture(std::string filename) {
+	sf::Texture texture;
+	texture.loadFromFile(filename);
+	return texture;
 }
