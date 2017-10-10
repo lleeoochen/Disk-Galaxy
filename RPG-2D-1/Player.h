@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 #include "Sprite.h"
 
 class Player : public Sprite {

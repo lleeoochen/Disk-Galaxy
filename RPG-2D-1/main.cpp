@@ -7,6 +7,7 @@
 
 //Variables
 const float BULLET_SPEED = 1;
+std::vector<Player> players;
 sf::Vector2i WIN_SIZE;
 sf::Texture getTexture(std::string filename);
 
@@ -20,13 +21,16 @@ int main() {
 	//Setup window
 	sf::RenderWindow window(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
 	Sprite background(&textureGalaxy, &window);
+	sf::Clock clock;
 
 	//Setup player
 	Player player(&textureUFO, &window);
-	player.setOrigin(player.width / 2, player.height / 2);
 	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
 
-	sf::Clock clock;
+	//Setup enemy
+	Player enemy(&textureUFO, &window);
+	enemy.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+	players.push_back(enemy);
 
 	//Game loop
 	while (window.isOpen()) {
@@ -48,10 +52,11 @@ int main() {
 
 		//Control bullet movement
 		Bullet::newBullet(&player, &window, &textureBullet, clock.getElapsedTime().asMilliseconds());
-		Bullet::fireAll(&window, BULLET_SPEED);
+		Bullet::fireAll(&window, &players, BULLET_SPEED);
 
 		//Draw objects
 		window.draw(player);
+		window.draw(enemy);
 		window.display();
 	}
 
