@@ -19,7 +19,19 @@ void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* te
 	}
 }
 
-void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED) {
+void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED, int time) {
+
+	//Remove flashing from player being hit
+	if (time % 200 == 0) {
+		for (unsigned int j = 0; j < flashes.size(); j++) {
+			Player* player = flashes[j];
+			player->setColor(sf::Color::White);
+			flashes.erase(flashes.begin());
+			j--;
+		}
+	}
+
+	//Fire all bullets
 	for (unsigned int i = 0; i < bullets.size(); i++) {
 		Bullet& bullet = bullets[i];
 
@@ -31,13 +43,14 @@ void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, fl
 				bullets.erase(bullets.begin());
 				i--;
 				shot = true;
+				player->setColor(sf::Color(255, 0, 0, 200));
+				flashes.push_back(player);
 			}
 		}
 
-		if (shot) {
-			//shot, do nothing
-		}
-		else if (bullet.getPosition().x < 0 || bullet.getPosition().x > window->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > window->getSize().y) {
+		if (shot) continue;
+
+		if (bullet.getPosition().x < 0 || bullet.getPosition().x > window->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > window->getSize().y) {
 			bullets.erase(bullets.begin()); //Bullet disappears outside of window
 			i--;
 		}

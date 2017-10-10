@@ -1,8 +1,10 @@
 #include "Sprite.h"
 
 Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window) {
-	texture->setSmooth(true);
-	this->setTexture(*texture);
+	if (texture != NULL) {
+		texture->setSmooth(true);
+		this->setTexture(*texture);
+	}
 	this->width = this->getGlobalBounds().width;
 	this->height = this->getGlobalBounds().height;
 	this->window_width = window->getSize().x;

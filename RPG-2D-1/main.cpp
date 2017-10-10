@@ -27,6 +27,10 @@ int main() {
 	Player player(&textureUFO, &window);
 	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
 
+	Player health(NULL, &window);
+	health.setScale(5, 5);
+	health.setColor(sf::Color::Green);
+
 	//Setup enemy
 	Player enemy(&textureUFO, &window);
 	enemy.setPosition(window.getSize().x / 2, window.getSize().y / 2);
@@ -52,11 +56,12 @@ int main() {
 
 		//Control bullet movement
 		Bullet::newBullet(&player, &window, &textureBullet, clock.getElapsedTime().asMilliseconds());
-		Bullet::fireAll(&window, &players, BULLET_SPEED);
+		Bullet::fireAll(&window, &players, BULLET_SPEED, clock.getElapsedTime().asMilliseconds());
 
 		//Draw objects
 		window.draw(player);
 		window.draw(enemy);
+		window.draw(health);
 		window.display();
 	}
 
