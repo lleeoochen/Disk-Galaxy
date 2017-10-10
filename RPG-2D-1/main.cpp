@@ -32,9 +32,13 @@ int main() {
 	health.setColor(sf::Color::Green);
 
 	//Setup enemy
-	Player enemy(&textureUFO, &window);
-	enemy.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-	players.push_back(&enemy);
+	Player enemy1(&textureUFO, &window);
+	enemy1.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+	players.push_back(&enemy1);
+
+	Player enemy2(&textureUFO, &window);
+	enemy2.setPosition(window.getSize().x / 4, window.getSize().y / 4);
+	players.push_back(&enemy2);
 
 	//Game loop
 	while (window.isOpen()) {
@@ -60,7 +64,8 @@ int main() {
 
 		//Draw objects
 		window.draw(player);
-		window.draw(enemy);
+		window.draw(enemy1);
+		window.draw(enemy2);
 		window.draw(health);
 		window.display();
 	}

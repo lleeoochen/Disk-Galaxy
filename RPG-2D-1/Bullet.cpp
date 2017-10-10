@@ -43,7 +43,7 @@ void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, fl
 				bullets.erase(bullets.begin());
 				i--;
 				shot = true;
-				player->setColor(sf::Color(255, 0, 0, 200));
+				player->setColor(sf::Color(255, 0, 0));
 				flashes.push_back(player);
 			}
 		}
