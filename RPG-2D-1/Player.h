@@ -1,10 +1,10 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <iostream>
+#include "Sprite.h"
 
-class Player : public sf::Sprite {
-	public:
-		Player(sf::Texture& texture);
-		int getWidth();
-		int getHeight();
+class Player : public Sprite {
+public:
+	Player(sf::Texture* texture, sf::RenderWindow* window);
+	void move();
+private:
+	const float SPEED = 0.5;
 };
