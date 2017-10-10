@@ -19,16 +19,15 @@ void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* te
 	}
 }
 
-void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player>* players, float BULLET_SPEED) {
+void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED) {
 	for (unsigned int i = 0; i < bullets.size(); i++) {
 		Bullet& bullet = bullets[i];
 
+		//Bullet disappears when hit enemy
 		bool shot = false;
 		for (unsigned int j = 0; j < players->size() && !shot; j++) {
-			Player player = (*players)[j];
-			if ( sqrt(
-				pow(bullet.getPosition().x - player.getPosition().x, 2) + 
-				pow(bullet.getPosition().y - player.getPosition().y, 2)) < player.width / 2) {
+			Player* player = (*players)[j];
+			if ( sqrt(pow(bullet.getPosition().x - player->getPosition().x, 2) + pow(bullet.getPosition().y - player->getPosition().y, 2)) < player->width / 2) {
 				bullets.erase(bullets.begin());
 				i--;
 				shot = true;
@@ -39,7 +38,7 @@ void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player>* players, flo
 			//shot, do nothing
 		}
 		else if (bullet.getPosition().x < 0 || bullet.getPosition().x > window->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > window->getSize().y) {
-			bullets.erase(bullets.begin());
+			bullets.erase(bullets.begin()); //Bullet disappears outside of window
 			i--;
 		}
 		else {

@@ -7,7 +7,7 @@
 
 //Variables
 const float BULLET_SPEED = 1;
-std::vector<Player> players;
+std::vector<Player*> players;
 sf::Vector2i WIN_SIZE;
 sf::Texture getTexture(std::string filename);
 
@@ -30,7 +30,7 @@ int main() {
 	//Setup enemy
 	Player enemy(&textureUFO, &window);
 	enemy.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-	players.push_back(enemy);
+	players.push_back(&enemy);
 
 	//Game loop
 	while (window.isOpen()) {
