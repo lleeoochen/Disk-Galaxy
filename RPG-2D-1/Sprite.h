@@ -5,6 +5,7 @@ class Sprite : public sf::Sprite {
 public:
 	Sprite(sf::Texture* texture, sf::RenderWindow* window);
 	void rotate();
+	void draw();
 
 	int width;
 	int height;

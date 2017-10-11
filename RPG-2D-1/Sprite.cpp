@@ -20,3 +20,7 @@ void Sprite::rotate() {
 	float rotation = atan2(dy, dx) * 180 / PI + 90;
 	this->setRotation(rotation);
 }
+
+void Sprite::draw() {
+	window->draw(*this);
+}

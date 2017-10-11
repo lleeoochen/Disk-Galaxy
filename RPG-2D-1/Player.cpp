@@ -2,6 +2,8 @@
 
 Player::Player(sf::Texture* texture, sf::RenderWindow* window) : Sprite(texture, window) {
 	this->setOrigin(this->width / 2, this->height / 2);
+	health = Health();
+	health.window = window;
 }
 
 //Move player based on keystroke
@@ -22,6 +24,17 @@ void Player::move() {
 	if (velocity.x != 0 && velocity.y != 0)
 		velocity /= std::sqrt(2.f);
 
-	//Move players
+	//Set movement
 	Sprite::move(velocity);
+	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
+}
+
+void Player::draw() {
+	Sprite::draw();
+	health.draw();
+}
+
+void Player::setPosition(float x, float y) {
+	Sprite::setPosition(x, y);
+	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
 }
