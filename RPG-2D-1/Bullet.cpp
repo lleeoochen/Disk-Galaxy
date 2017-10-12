@@ -3,7 +3,7 @@
 Bullet::Bullet(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Sprite(texture, window, clock) {
 	
 }
-
+/*
 void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* texture, sf::Clock* clock) {
 
 	if (clock->getElapsedTime().asMilliseconds() % 100 == 0)
@@ -68,7 +68,7 @@ void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, fl
 		}
 	}
 }
-
+*/
 //Calculate angle between 4 quadrants
 sf::Vector2f Bullet::calculateAngle(Bullet& bullet) {
 	float angle;

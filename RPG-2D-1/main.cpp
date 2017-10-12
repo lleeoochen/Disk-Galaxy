@@ -8,7 +8,6 @@
 
 //Variables
 const float BULLET_SPEED = 1;
-std::vector<Player*> players;
 sf::Vector2i WIN_SIZE;
 bool startLogin();
 void startGame();
@@ -85,13 +84,19 @@ void startGame() {
 	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
 
 	//Setup enemy
-	Robot enemy1(&textureUFO, &window, &clock);
-	enemy1.setPosition(window.getSize().x / 2, window.getSize().y / 2);
-	players.push_back(&enemy1);
+	Robot robot1(&textureUFO, &window, &clock);
+	robot1.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 
-	Robot enemy2(&textureUFO, &window, &clock);
-	enemy2.setPosition(window.getSize().x / 4, window.getSize().y / 4);
-	players.push_back(&enemy2);
+	Robot robot2(&textureUFO, &window, &clock);
+	robot2.setPosition(window.getSize().x / 4, window.getSize().y / 4);
+
+	//Add enemies
+	player.enemies.push_back(&robot1);
+	player.enemies.push_back(&robot2);
+	robot1.enemies.push_back(&player);
+	robot1.enemies.push_back(&robot2);
+	robot2.enemies.push_back(&player);
+	robot2.enemies.push_back(&robot1);
 
 	//Game loop
 	while (window.isOpen()) {
@@ -108,19 +113,34 @@ void startGame() {
 		}
 
 		//Control player movement
-		player.move();
-		player.rotate();
-		enemy1.move();
-		enemy2.move();
+		if (player.exists()) {
+			player.move();
+			player.aim(sf::Mouse::getPosition(window));
+			player.fire(&textureBullet, BULLET_SPEED, false);
+			player.draw();
+		}
 
-		//Control bullet movement
-		Bullet::newBullet(&player, &window, &textureBullet, &clock);
-		Bullet::fireAll(&window, &players, BULLET_SPEED, &clock);
+		//Control robot1 movement
+		if (robot1.exists()) {
+			robot1.move();
+			if (player.exists()) {
+				robot1.aim((sf::Vector2i) player.getPosition());
+				robot1.fire(&textureBullet, BULLET_SPEED, true);
+			}
+			robot1.draw();
+		}
+
+		//Control robot2 movement
+		if (robot2.exists()) {
+			robot2.move();
+			if (player.exists()) {
+				robot2.aim((sf::Vector2i) player.getPosition());
+				robot2.fire(&textureBullet, BULLET_SPEED, true);
+			}
+			robot2.draw();
+		}
 
 		//Draw objects
-		player.draw();
-		enemy1.draw();
-		window.draw(enemy2);
 		window.display();
 	}
 }

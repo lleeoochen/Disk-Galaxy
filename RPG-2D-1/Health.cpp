@@ -2,7 +2,7 @@
 
 Health::Health() {
 	this->maxHealth = 100;
-	this->health = 100;
+	this->currentHealth = 100;
 	this->redBar = sf::RectangleShape(sf::Vector2f(WIDTH, HEIGHT));
 	this->greenBar = sf::RectangleShape(sf::Vector2f(WIDTH, HEIGHT));
 
@@ -14,7 +14,7 @@ Health::Health() {
 }
 
 void Health::setHealth(float health) {
-	this->health = health;
+	this->currentHealth = health;
 }
 
 void Health::setMaxHealth(float maxHealth) {
@@ -27,14 +27,14 @@ void Health::setPosition(sf::Vector2f position) {
 }
 
 void Health::operator= (Health& otherHealth) {
-	this->health = otherHealth.health;
+	this->currentHealth = otherHealth.currentHealth;
 	this->maxHealth = otherHealth.maxHealth;
 }
 
 void Health::draw() {
 	window->draw(redBar);
-	if (health <= maxHealth && health >= 0) {
-		greenBar.setSize(sf::Vector2f(WIDTH * health / maxHealth, HEIGHT));
+	if (currentHealth <= maxHealth && currentHealth >= 0) {
+		greenBar.setSize(sf::Vector2f(WIDTH * currentHealth / maxHealth, HEIGHT));
 		window->draw(greenBar);
 	}
 }

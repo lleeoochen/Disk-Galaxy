@@ -13,11 +13,10 @@ Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock)
 	this->clock = clock;
 }
 
-void Sprite::rotate() {
+void Sprite::aim(sf::Vector2i position) { //genrify to position vector
 	sf::Vector2f playerPos = this->getPosition();
-	sf::Vector2i curserPos = sf::Mouse::getPosition(*window);
-	float dx = curserPos.x - playerPos.x;
-	float dy = curserPos.y - playerPos.y;
+	float dx = position.x - playerPos.x;
+	float dy = position.y - playerPos.y;
 	float rotation = atan2(dy, dx) * 180 / PI + 90;
 	this->setRotation(rotation);
 }

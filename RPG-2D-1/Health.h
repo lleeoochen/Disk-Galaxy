@@ -13,7 +13,7 @@ public:
 
 	const float HEIGHT = 5.f;
 	const float WIDTH = 100.f;
-	float health;
+	float currentHealth;
 	float maxHealth;
 	sf::RectangleShape redBar;
 	sf::RectangleShape greenBar;

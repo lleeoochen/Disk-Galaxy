@@ -4,7 +4,7 @@
 class Sprite : public sf::Sprite {
 public:
 	Sprite(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock);
-	void rotate();
+	void aim(sf::Vector2i position);
 	void draw();
 
 	int width;
