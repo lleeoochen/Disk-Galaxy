@@ -3,6 +3,7 @@
 #include <math.h>
 #include "Sprite.h"
 #include "Player.h"
+#include "Robot.h"
 #include "Bullet.h"
 
 //Variables
@@ -34,9 +35,9 @@ bool startLogin() {
 	title.setCharacterSize(30);
 	title.setFillColor(sf::Color::White);
 
-	Sprite button(&texture, &window);
+	Sprite button(&texture, &window, NULL);
 	button.setPosition(window.getSize().x / 2 - button.width / 2, window.getSize().y * 3 / 4 - button.height / 2);
-	Sprite background(&textureGalaxy, &window);
+	Sprite background(&textureGalaxy, &window, NULL);
 
 	//Game loop
 	while (window.isOpen()) {
@@ -76,19 +77,19 @@ void startGame() {
 
 	//Setup window
 	sf::RenderWindow window(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
-	Sprite background(&textureGalaxy, &window);
 	sf::Clock clock;
+	Sprite background(&textureGalaxy, &window, &clock);
 
 	//Setup player
-	Player player(&textureUFO, &window);
+	Player player(&textureUFO, &window, &clock);
 	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
 
 	//Setup enemy
-	Player enemy1(&textureUFO, &window);
+	Robot enemy1(&textureUFO, &window, &clock);
 	enemy1.setPosition(window.getSize().x / 2, window.getSize().y / 2);
 	players.push_back(&enemy1);
 
-	Player enemy2(&textureUFO, &window);
+	Robot enemy2(&textureUFO, &window, &clock);
 	enemy2.setPosition(window.getSize().x / 4, window.getSize().y / 4);
 	players.push_back(&enemy2);
 
@@ -109,10 +110,12 @@ void startGame() {
 		//Control player movement
 		player.move();
 		player.rotate();
+		enemy1.move();
+		enemy2.move();
 
 		//Control bullet movement
-		Bullet::newBullet(&player, &window, &textureBullet, clock.getElapsedTime().asMilliseconds());
-		Bullet::fireAll(&window, &players, BULLET_SPEED, clock.getElapsedTime().asMilliseconds());
+		Bullet::newBullet(&player, &window, &textureBullet, &clock);
+		Bullet::fireAll(&window, &players, BULLET_SPEED, &clock);
 
 		//Draw objects
 		player.draw();

@@ -1,6 +1,6 @@
 #include "Sprite.h"
 
-Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window) {
+Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) {
 	if (texture != NULL) {
 		texture->setSmooth(true);
 		this->setTexture(*texture);
@@ -10,6 +10,7 @@ Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window) {
 	this->window_width = window->getSize().x;
 	this->window_height = window->getSize().y;
 	this->window = window;
+	this->clock = clock;
 }
 
 void Sprite::rotate() {

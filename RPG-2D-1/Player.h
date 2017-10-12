@@ -5,7 +5,7 @@
 
 class Player : public Sprite {
 public:
-	Player(sf::Texture* texture, sf::RenderWindow* window);
+	Player(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock);
 	void move();
 	void draw();
 	void setPosition(float x, float y);

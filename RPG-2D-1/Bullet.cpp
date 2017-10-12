@@ -1,16 +1,16 @@
 #include "Bullet.h"
 
-Bullet::Bullet(sf::Texture* texture, sf::RenderWindow* window) : Sprite(texture, window) {
+Bullet::Bullet(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Sprite(texture, window, clock) {
 	
 }
 
-void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* texture, int time) {
+void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* texture, sf::Clock* clock) {
 
-	if (time % 100 == 0)
+	if (clock->getElapsedTime().asMilliseconds() % 100 == 0)
 		AVAILABLE = true;
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && AVAILABLE) {
-		Bullet bullet(texture, window); //Create new bullet
+		Bullet bullet(texture, window, clock); //Create new bullet
 		bullet.setPosition((*player).getPosition());
 		bullet.rotate();
 
@@ -19,10 +19,10 @@ void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* te
 	}
 }
 
-void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED, int time) {
+void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED, sf::Clock* clock) {
 
 	//Remove flashing from player being hit
-	if (time % 200 == 0) {
+	if (clock->getElapsedTime().asMilliseconds() % 200 == 0) {
 		for (unsigned int j = 0; j < flashes.size(); j++) {
 			Player* player = flashes[j];
 			player->setColor(sf::Color::White);

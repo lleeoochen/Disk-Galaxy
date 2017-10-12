@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(sf::Texture* texture, sf::RenderWindow* window) : Sprite(texture, window) {
+Player::Player(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Sprite(texture, window, clock) {
 	this->setOrigin(this->width / 2, this->height / 2);
 	health = Health();
 	health.window = window;
