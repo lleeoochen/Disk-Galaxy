@@ -5,7 +5,7 @@
 
 class Robot : public Player {
 public:
-	Robot(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock);
+	Robot(sf::Texture* texture);
 	void move();
 	void fire(sf::Texture* textureBullet, float bulletSpeed);
 private:

@@ -1,6 +1,6 @@
 #include "User.h"
 
-User::User(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Player(texture, window, clock) {
+User::User(sf::Texture* texture) : Player(texture) {
 
 }
 
@@ -27,11 +27,11 @@ void User::move() {
 }
 
 void User::fire(sf::Texture* textureBullet, float bulletSpeed) {
-	if (clock->getElapsedTime().asMilliseconds() % 100 == 0) {
+	if (CLOCK->getElapsedTime().asMilliseconds() % 100 == 0) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) | sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			Bullet bullet(textureBullet, window, clock); //Create new bullet
+			Bullet bullet(textureBullet); //Create new bullet
 			bullet.setPosition(this->getPosition());
-			bullet.aim(sf::Mouse::getPosition(*window));
+			bullet.aim(sf::Mouse::getPosition(*WINDOW));
 			bullets.push_back(bullet); //Add new bullet to list
 		}
 	}

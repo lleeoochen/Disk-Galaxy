@@ -1,75 +1,9 @@
 #include "Bullet.h"
 
-Bullet::Bullet(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Sprite(texture, window, clock) {
+Bullet::Bullet(sf::Texture* texture) : Sprite(texture) {
 	
 }
-/*
-void Bullet::newBullet(Sprite* player, sf::RenderWindow* window, sf::Texture* texture, sf::Clock* clock) {
 
-	if (clock->getElapsedTime().asMilliseconds() % 100 == 0)
-		AVAILABLE = true;
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && AVAILABLE) {
-		Bullet bullet(texture, window, clock); //Create new bullet
-		bullet.setPosition((*player).getPosition());
-		bullet.rotate();
-
-		bullets.push_back(bullet); //Add new bullet to list
-		AVAILABLE = false;
-	}
-}
-
-void Bullet::fireAll(sf::RenderWindow* window, std::vector<Player*>* players, float BULLET_SPEED, sf::Clock* clock) {
-
-	//Remove flashing from player being hit
-	if (clock->getElapsedTime().asMilliseconds() % 200 == 0) {
-		for (unsigned int j = 0; j < flashes.size(); j++) {
-			Player* player = flashes[j];
-			player->setColor(sf::Color::White);
-			flashes.erase(flashes.begin());
-			j--;
-		}
-	}
-
-	//Fire all bullets
-	for (unsigned int i = 0; i < bullets.size(); i++) {
-		Bullet& bullet = bullets[i];
-
-		//Bullet disappears when hit enemy
-		bool shot = false;
-		for (unsigned int j = 0; j < players->size() && !shot; j++) {
-			Player* player = (*players)[j];
-			if ( sqrt(pow(bullet.getPosition().x - player->getPosition().x, 2) + pow(bullet.getPosition().y - player->getPosition().y, 2)) < player->width / 2) {
-				bullets.erase(bullets.begin());
-				i--;
-				shot = true;
-				player->health.setHealth(player->health.health - 5); //reduce health
-				player->setColor(sf::Color(255, 0, 0));
-				flashes.push_back(player);
-			}
-		}
-
-		if (shot) continue;
-
-		if (bullet.getPosition().x < 0 || bullet.getPosition().x > window->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > window->getSize().y) {
-			bullets.erase(bullets.begin()); //Bullet disappears outside of window
-			i--;
-		}
-		else {
-			sf::Vector2f velocity = calculateAngle(bullet);
-
-			velocity.x *= BULLET_SPEED;
-			velocity.y *= BULLET_SPEED;
-			if (velocity.x != 0 && velocity.y != 0)
-				velocity /= std::sqrt(2.f);
-
-			bullet.move(velocity);
-			(*window).draw(bullet);
-		}
-	}
-}
-*/
-//Calculate angle between 4 quadrants
 sf::Vector2f Bullet::calculateAngle(Bullet& bullet) {
 	float angle;
 	sf::Vector2f velocity(0, 0);

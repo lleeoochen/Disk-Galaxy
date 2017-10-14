@@ -1,13 +1,13 @@
 #include "Robot.h"
 
-Robot::Robot(sf::Texture * texture, sf::RenderWindow * window, sf::Clock* clock) : Player(texture, window, clock) {
+Robot::Robot(sf::Texture * texture) : Player(texture) {
 	direction = 0;
 }
 
 void Robot::move() {
 
 	//Change direction every 0.5 seconds
-	if (clock->getElapsedTime().asMilliseconds() % 500 == 0)
+	if (CLOCK->getElapsedTime().asMilliseconds() % 500 == 0)
 		direction = (int)(rand() % 4);
 
 	//Set speed
@@ -25,7 +25,7 @@ void Robot::move() {
 		velocity = sf::Vector2f(0, -speed);
 
 	//Border check for left and right
-	if (this->getPosition().x - this->width / 2 + velocity.x <= 0 || this->getPosition().x + this->width / 2 + velocity.x >= window->getSize().x) {
+	if (this->getPosition().x - this->width / 2 + velocity.x <= 0 || this->getPosition().x + this->width / 2 + velocity.x >= WINDOW->getSize().x) {
 		velocity.x = -velocity.x;
 		if (direction == 0) 
 			direction = 1;
@@ -34,7 +34,7 @@ void Robot::move() {
 	}
 
 	//Border check for top and down
-	if (this->getPosition().y - this->height / 2 + velocity.y <= 0 || this->getPosition().y + this->height / 2 + velocity.y >= window->getSize().y) {
+	if (this->getPosition().y - this->height / 2 + velocity.y <= 0 || this->getPosition().y + this->height / 2 + velocity.y >= WINDOW->getSize().y) {
 		velocity.y = -velocity.y;
 		if (direction == 2)
 			direction = 3;
@@ -49,8 +49,8 @@ void Robot::move() {
 
 void Robot::fire(sf::Texture* textureBullet, float bulletSpeed) {
 
-	if (clock->getElapsedTime().asMilliseconds() % 200 == 0) {
-		Bullet bullet(textureBullet, window, clock); //Create new bullet
+	if (CLOCK->getElapsedTime().asMilliseconds() % 200 == 0) {
+		Bullet bullet(textureBullet); //Create new bullet
 		bullet.setPosition(this->getPosition());
 		bullet.setRotation(this->getRotation());
 		bullets.push_back(bullet); //Add new bullet to list

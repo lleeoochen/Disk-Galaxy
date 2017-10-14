@@ -3,7 +3,7 @@
 
 class User : public Player {
 public:
-	User(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock);
+	User(sf::Texture* texture);
 	void move();
 	void fire(sf::Texture* textureBullet, float bulletSpeed);
 };

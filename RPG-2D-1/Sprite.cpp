@@ -1,16 +1,14 @@
 #include "Sprite.h"
 
-Sprite::Sprite(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) {
+Sprite::Sprite(sf::Texture* texture) {
 	if (texture != NULL) {
 		texture->setSmooth(true);
 		this->setTexture(*texture);
 	}
 	this->width = this->getGlobalBounds().width;
 	this->height = this->getGlobalBounds().height;
-	this->window_width = window->getSize().x;
-	this->window_height = window->getSize().y;
-	this->window = window;
-	this->clock = clock;
+	this->window_width = WINDOW->getSize().x;
+	this->window_height = WINDOW->getSize().y;
 }
 
 void Sprite::aim(sf::Vector2i position) { //genrify to position vector
@@ -22,5 +20,5 @@ void Sprite::aim(sf::Vector2i position) { //genrify to position vector
 }
 
 void Sprite::draw() {
-	window->draw(*this);
+	WINDOW->draw(*this);
 }

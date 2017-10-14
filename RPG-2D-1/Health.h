@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "Global.h"
 
 class Health {
 public:
@@ -17,5 +18,4 @@ public:
 	float maxHealth;
 	sf::RectangleShape redBar;
 	sf::RectangleShape greenBar;
-	sf::RenderWindow* window;
 };

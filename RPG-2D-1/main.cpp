@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
+#include "Global.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "User.h"
@@ -22,7 +23,7 @@ int main() {
 }
 
 bool startLogin() {
-	sf::RenderWindow window(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
+	WINDOW = new sf::RenderWindow(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
 
 	sf::Texture textureGalaxy = getTexture("galaxy.png");
 	sf::Texture texture = getTexture("StartButton.png");
@@ -31,41 +32,42 @@ bool startLogin() {
 	sf::Text title;
 	title.setString("Welcome to Disk Galaxy!");
 	title.setFont(font);
-	title.setPosition(window.getSize().x / 2 - title.getGlobalBounds().width / 2, window.getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
+	title.setPosition(WINDOW->getSize().x / 2 - title.getGlobalBounds().width / 2, WINDOW->getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
 	title.setCharacterSize(30);
 	title.setFillColor(sf::Color::White);
 
-	Sprite button(&texture, &window, NULL);
-	button.setPosition(window.getSize().x / 2 - button.width / 2, window.getSize().y * 3 / 4 - button.height / 2);
-	Sprite background(&textureGalaxy, &window, NULL);
+	Sprite button(&texture);
+	button.setPosition(WINDOW->getSize().x / 2 - button.width / 2, WINDOW->getSize().y * 3 / 4 - button.height / 2);
+	Sprite background(&textureGalaxy);
 
 	//Game loop
-	while (window.isOpen()) {
+	while (WINDOW->isOpen()) {
 
 		//Event loop
 		sf::Event event;
-		while (window.pollEvent(event)) {
+		while (WINDOW->pollEvent(event)) {
 			if (event.type == sf::Event::Closed)
-				window.close();
+				WINDOW->close();
 			if (event.type == sf::Event::MouseButtonPressed) {
-				sf::Vector2i mouse = sf::Mouse::getPosition(window);
+				sf::Vector2i mouse = sf::Mouse::getPosition(*WINDOW);
 				int dx = mouse.x - button.getPosition().x;
 				int dy = mouse.y - button.getPosition().y;
 				if (dx >= 0 && dy >= 0 && dx <= button.width && dy <= button.height) {
-					window.close();
+					WINDOW->close();
+					delete WINDOW;
 					return true;
 				}
 			}
 		}
 
-
 		//Draw window
-		window.clear();
-		window.draw(background);
-		window.draw(button);
-		window.draw(title);
-		window.display();
+		WINDOW->clear();
+		background.draw();
+		button.draw();
+		WINDOW->draw(title);
+		WINDOW->display();
 	}
+	delete WINDOW;
 	return false;
 }
 
@@ -76,20 +78,20 @@ void startGame() {
 	sf::Texture textureBullet = getTexture("bullet.png");
 
 	//Setup window
-	sf::RenderWindow window(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
-	sf::Clock clock;
-	Sprite background(&textureGalaxy, &window, &clock);
+	WINDOW = new sf::RenderWindow(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
+	CLOCK = new sf::Clock();
+	Sprite background(&textureGalaxy);
 
 	//Setup player
-	User player(&textureUFO, &window, &clock);
-	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
+	User player(&textureUFO);
+	player.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - player.height / 2);
 
 	//Setup enemy
-	Robot robot1(&textureUFO, &window, &clock);
-	robot1.setPosition(window.getSize().x / 2, window.getSize().y / 2);
+	Robot robot1(&textureUFO);
+	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
 
-	Robot robot2(&textureUFO, &window, &clock);
-	robot2.setPosition(window.getSize().x / 4, window.getSize().y / 4);
+	Robot robot2(&textureUFO);
+	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
 
 	//Add enemies
 	player.enemies.push_back(&robot1);
@@ -100,23 +102,27 @@ void startGame() {
 	robot2.enemies.push_back(&robot1);
 
 	//Game loop
-	while (window.isOpen()) {
+	while (WINDOW->isOpen()) {
 
 		//Clear window
-		window.clear();
-		window.draw(background);
+		WINDOW->clear();
+		WINDOW->draw(background);
 
 		//Event loop
 		sf::Event event;
-		while (window.pollEvent(event)) {
-			if (event.type == sf::Event::Closed)
-				window.close();
+		while (WINDOW->pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				WINDOW->close();
+				delete WINDOW;
+				delete CLOCK;
+				return;
+			}
 		}
 
 		//Control player movement
 		if (player.exists()) {
 			player.move();
-			player.aim(sf::Mouse::getPosition(window));
+			player.aim(sf::Mouse::getPosition(*WINDOW));
 			player.fire(&textureBullet, BULLET_SPEED);
 			player.draw();
 		}
@@ -142,8 +148,10 @@ void startGame() {
 		}
 
 		//Draw objects
-		window.display();
+		WINDOW->display();
 	}
+	delete WINDOW;
+	delete CLOCK;
 }
 
 //Get texture from file

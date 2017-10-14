@@ -32,9 +32,9 @@ void Health::operator= (Health& otherHealth) {
 }
 
 void Health::draw() {
-	window->draw(redBar);
+	WINDOW->draw(redBar);
 	if (currentHealth <= maxHealth && currentHealth >= 0) {
 		greenBar.setSize(sf::Vector2f(WIDTH * currentHealth / maxHealth, HEIGHT));
-		window->draw(greenBar);
+		WINDOW->draw(greenBar);
 	}
 }

@@ -6,7 +6,7 @@
 
 class Player : public Sprite {
 public:
-	Player(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock);
+	Player(sf::Texture* texture);
 	bool exists();
 	virtual void move() {};
 	void draw();

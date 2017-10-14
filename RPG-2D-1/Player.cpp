@@ -1,9 +1,8 @@
 #include "Player.h"
 
-Player::Player(sf::Texture* texture, sf::RenderWindow* window, sf::Clock* clock) : Sprite(texture, window, clock) {
+Player::Player(sf::Texture* texture) : Sprite(texture) {
 	this->setOrigin(this->width / 2, this->height / 2);
 	health = Health();
-	health.window = window;
 }
 
 bool Player::exists() {
@@ -23,7 +22,7 @@ void Player::setPosition(float x, float y) {
 void Player::fireAll(float bulletSpeed) {
 
 	//Remove flashing from player being hit
-	if (clock->getElapsedTime().asMilliseconds() % 200 == 0) {
+	if (CLOCK->getElapsedTime().asMilliseconds() % 200 == 0) {
 		for (unsigned int j = 0; j < flashes.size(); j++) {
 			Player* player = flashes[j];
 			player->setColor(sf::Color::White);
@@ -57,7 +56,7 @@ void Player::fireAll(float bulletSpeed) {
 
 		if (shot) continue;
 
-		if (bullet.getPosition().x < 0 || bullet.getPosition().x > window->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > window->getSize().y) {
+		if (bullet.getPosition().x < 0 || bullet.getPosition().x > WINDOW->getSize().x || bullet.getPosition().y < 0 || bullet.getPosition().y > WINDOW->getSize().y) {
 			bullets.erase(bullets.begin()); //Bullet disappears outside of window
 			i--;
 		}
@@ -70,7 +69,7 @@ void Player::fireAll(float bulletSpeed) {
 				velocity /= std::sqrt(2.f);
 
 			bullet.move(velocity);
-			(*window).draw(bullet);
+			(*WINDOW).draw(bullet);
 		}
 	}
 }
