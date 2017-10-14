@@ -3,6 +3,7 @@
 #include <math.h>
 #include "Sprite.h"
 #include "Player.h"
+#include "User.h"
 #include "Robot.h"
 #include "Bullet.h"
 
@@ -80,7 +81,7 @@ void startGame() {
 	Sprite background(&textureGalaxy, &window, &clock);
 
 	//Setup player
-	Player player(&textureUFO, &window, &clock);
+	User player(&textureUFO, &window, &clock);
 	player.setPosition(window.getSize().x / 2, window.getSize().y - player.height / 2);
 
 	//Setup enemy
@@ -116,7 +117,7 @@ void startGame() {
 		if (player.exists()) {
 			player.move();
 			player.aim(sf::Mouse::getPosition(window));
-			player.fire(&textureBullet, BULLET_SPEED, false);
+			player.fire(&textureBullet, BULLET_SPEED);
 			player.draw();
 		}
 
@@ -125,7 +126,7 @@ void startGame() {
 			robot1.move();
 			if (player.exists()) {
 				robot1.aim((sf::Vector2i) player.getPosition());
-				robot1.fire(&textureBullet, BULLET_SPEED, true);
+				robot1.fire(&textureBullet, BULLET_SPEED);
 			}
 			robot1.draw();
 		}
@@ -135,7 +136,7 @@ void startGame() {
 			robot2.move();
 			if (player.exists()) {
 				robot2.aim((sf::Vector2i) player.getPosition());
-				robot2.fire(&textureBullet, BULLET_SPEED, true);
+				robot2.fire(&textureBullet, BULLET_SPEED);
 			}
 			robot2.draw();
 		}

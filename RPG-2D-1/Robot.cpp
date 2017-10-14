@@ -46,3 +46,15 @@ void Robot::move() {
 	Sprite::move(velocity);
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
 }
+
+void Robot::fire(sf::Texture* textureBullet, float bulletSpeed) {
+
+	if (clock->getElapsedTime().asMilliseconds() % 200 == 0) {
+		Bullet bullet(textureBullet, window, clock); //Create new bullet
+		bullet.setPosition(this->getPosition());
+		bullet.setRotation(this->getRotation());
+		bullets.push_back(bullet); //Add new bullet to list
+	}
+
+	fireAll(bulletSpeed);
+}

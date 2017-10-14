@@ -10,49 +10,6 @@ bool Player::exists() {
 	return this->health.currentHealth > 0;
 }
 
-//Move player based on keystroke
-void Player::move() {
-	sf::Vector2f velocity(0.f, 0.f);
-
-	//Four movement direction and boundary check
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->getPosition().x - this->width / 2 >= 0)
-		velocity.x -= SPEED;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && this->getPosition().x + this->height / 2 <= window_width)
-		velocity.x += SPEED;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && this->getPosition().y - this->width / 2 >= 0)
-		velocity.y -= SPEED;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->getPosition().y + this->height / 2 <= window_height)
-		velocity.y += SPEED;
-
-	//Diagonal movement (/sqrt(2))
-	if (velocity.x != 0 && velocity.y != 0)
-		velocity /= std::sqrt(2.f);
-
-	//Set movement
-	Sprite::move(velocity);
-	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
-}
-
-void Player::fire(sf::Texture* texture, float bulletSpeed, bool autoShoot) {
-
-	if (clock->getElapsedTime().asMilliseconds() % 100 == 0) {
-
-		if (autoShoot || sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-			Bullet bullet(texture, window, clock); //Create new bullet
-			bullet.setPosition(this->getPosition());
-
-			if (autoShoot)
-				bullet.setRotation(this->getRotation());
-			else
-				bullet.aim(sf::Mouse::getPosition(*window));
-
-			bullets.push_back(bullet); //Add new bullet to list
-		}
-	}
-
-	fireAll(bulletSpeed);
-}
-
 void Player::draw() {
 	Sprite::draw();
 	health.draw();
