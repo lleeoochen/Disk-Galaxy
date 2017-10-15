@@ -11,34 +11,49 @@
 //Variables
 const float BULLET_SPEED = 1;
 sf::Vector2i WIN_SIZE;
-bool startLogin();
+bool toGame = false;
+
+void initialize();
+void startLogin();
 void startGame();
+void deletePointers();
+
 sf::Texture getTexture(std::string filename);
 sf::Font getFont(std::string filename);
 
+//Main
 int main() {
-	if (startLogin())
-		startGame();
+	initialize();
+	startLogin();
+	if(toGame) startGame();
+	deletePointers();
 	return 0;
 }
 
-bool startLogin() {
+//Initialize global pointers
+void initialize() {
 	WINDOW = new sf::RenderWindow(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
+	CLOCK = new sf::Clock();
+	TEXTURE_GALAXY = new sf::Texture (getTexture("galaxy.png"));
+	TEXTURE_BUTTON = new sf::Texture(getTexture("StartButton.png"));
+	TEXTURE_UFO = new sf::Texture(getTexture("ufo.png"));
+	TEXTURE_BULLET = new sf::Texture(getTexture("bullet.png"));
+	FONT = getFont("summit.ttf");
+}
 
-	sf::Texture textureGalaxy = getTexture("galaxy.png");
-	sf::Texture texture = getTexture("StartButton.png");
-	sf::Font font = getFont("summit.ttf");
+//Start login
+void startLogin() {
 
 	sf::Text title;
 	title.setString("Welcome to Disk Galaxy!");
-	title.setFont(font);
+	title.setFont(FONT);
 	title.setPosition(WINDOW->getSize().x / 2 - title.getGlobalBounds().width / 2, WINDOW->getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
 	title.setCharacterSize(30);
 	title.setFillColor(sf::Color::White);
 
-	Sprite button(&texture);
+	Sprite background(TEXTURE_GALAXY);
+	Sprite button(TEXTURE_BUTTON);
 	button.setPosition(WINDOW->getSize().x / 2 - button.width / 2, WINDOW->getSize().y * 3 / 4 - button.height / 2);
-	Sprite background(&textureGalaxy);
 
 	//Game loop
 	while (WINDOW->isOpen()) {
@@ -53,44 +68,38 @@ bool startLogin() {
 				int dx = mouse.x - button.getPosition().x;
 				int dy = mouse.y - button.getPosition().y;
 				if (dx >= 0 && dy >= 0 && dx <= button.width && dy <= button.height) {
-					WINDOW->close();
-					delete WINDOW;
-					return true;
+					toGame = true;
+					return;
 				}
 			}
 		}
 
 		//Draw window
 		WINDOW->clear();
-		background.draw();
-		button.draw();
+		WINDOW->draw(background);
 		WINDOW->draw(title);
+		WINDOW->draw(button);
 		WINDOW->display();
 	}
-	delete WINDOW;
-	return false;
+	toGame = false;
 }
 
+//Start game
 void startGame() {
-	//Setup textures
-	sf::Texture textureUFO = getTexture("ufo.png");
-	sf::Texture textureGalaxy = getTexture("galaxy.png");
-	sf::Texture textureBullet = getTexture("bullet.png");
 
 	//Setup window
-	WINDOW = new sf::RenderWindow(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
-	CLOCK = new sf::Clock();
-	Sprite background(&textureGalaxy);
+	Sprite background(TEXTURE_GALAXY);
 
 	//Setup player
-	User player(&textureUFO);
+	User player(TEXTURE_UFO);
 	player.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - player.height / 2);
 
-	//Setup enemy
-	Robot robot1(&textureUFO);
+	//Setup enemy1
+	Robot robot1(TEXTURE_UFO);
 	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
 
-	Robot robot2(&textureUFO);
+	//Setup enemy2
+	Robot robot2(TEXTURE_UFO);
 	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
 
 	//Add enemies
@@ -113,8 +122,6 @@ void startGame() {
 		while (WINDOW->pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				WINDOW->close();
-				delete WINDOW;
-				delete CLOCK;
 				return;
 			}
 		}
@@ -123,7 +130,7 @@ void startGame() {
 		if (player.exists()) {
 			player.move();
 			player.aim(sf::Mouse::getPosition(*WINDOW));
-			player.fire(&textureBullet, BULLET_SPEED);
+			player.fire(TEXTURE_BULLET, BULLET_SPEED);
 			player.draw();
 		}
 
@@ -132,7 +139,7 @@ void startGame() {
 			robot1.move();
 			if (player.exists()) {
 				robot1.aim((sf::Vector2i) player.getPosition());
-				robot1.fire(&textureBullet, BULLET_SPEED);
+				robot1.fire(TEXTURE_BULLET, BULLET_SPEED);
 			}
 			robot1.draw();
 		}
@@ -142,7 +149,7 @@ void startGame() {
 			robot2.move();
 			if (player.exists()) {
 				robot2.aim((sf::Vector2i) player.getPosition());
-				robot2.fire(&textureBullet, BULLET_SPEED);
+				robot2.fire(TEXTURE_BULLET, BULLET_SPEED);
 			}
 			robot2.draw();
 		}
@@ -150,8 +157,16 @@ void startGame() {
 		//Draw objects
 		WINDOW->display();
 	}
+}
+
+//Delete all global pointers
+void deletePointers() {
 	delete WINDOW;
 	delete CLOCK;
+	delete TEXTURE_GALAXY;
+	delete TEXTURE_BUTTON;
+	delete TEXTURE_UFO;
+	delete TEXTURE_BULLET;
 }
 
 //Get texture from file
