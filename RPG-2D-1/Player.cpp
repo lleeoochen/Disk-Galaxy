@@ -12,6 +12,11 @@ bool Player::exists() {
 void Player::draw() {
 	Sprite::draw();
 	health.draw();
+
+	if (scoreboard != NULL) {
+		scoreboard->score = score;
+		scoreboard->draw();
+	}
 }
 
 void Player::updateEnemies() {
@@ -50,17 +55,17 @@ void Player::fireAll(float bulletSpeed) {
 		for (unsigned int j = 0; j < this->enemies.size() && !shot; j++) {
 			Player* enemy = this->enemies[j];
 
-			if (!enemy->exists()) {
-				enemies.erase(enemies.begin() + j);
-				j--;
-			} 
-			else if (sqrt(pow(bullet.getPosition().x - enemy->getPosition().x, 2) + pow(bullet.getPosition().y - enemy->getPosition().y, 2)) < enemy->width / 2) {
+			if (sqrt(pow(bullet.getPosition().x - enemy->getPosition().x, 2) + pow(bullet.getPosition().y - enemy->getPosition().y, 2)) < enemy->width / 2) {
 				bullets.erase(bullets.begin());
 				i--;
 				shot = true;
 				enemy->health.setHealth(enemy->health.currentHealth - 1); //reduce health
 				enemy->setColor(sf::Color(255, 0, 0));
 				flashes.push_back(enemy);
+
+				float ds = 60 / (CLOCK->getElapsedTime().asSeconds());
+				if (ds == 0) score += 1;
+				else score += ds;
 			}
 		}
 
@@ -82,4 +87,8 @@ void Player::fireAll(float bulletSpeed) {
 			(*WINDOW).draw(bullet);
 		}
 	}
+}
+
+void Player::trackScore(Score* scoreboard) {
+	this->scoreboard = scoreboard;
 }

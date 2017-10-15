@@ -102,11 +102,12 @@ void startGame() {
 	Sprite background(TEXTURE_GALAXY);
 
 	//Setup score board
-	Score score;
+	Score scoreboard;
 
 	//Setup user1
 	User user1(TEXTURE_UFO);
 	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
+	user1.trackScore(&scoreboard);
 
 	//Setup enemy1
 	Robot robot1(TEXTURE_UFO_ENEMY);
@@ -189,8 +190,6 @@ void startGame() {
 				robot2.draw();
 			}
 		}
-
-		score.draw();
 
 		//Draw objects
 		WINDOW->display();
