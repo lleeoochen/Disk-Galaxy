@@ -90,9 +90,9 @@ void startGame() {
 	//Setup window
 	Sprite background(TEXTURE_GALAXY);
 
-	//Setup player
-	User player(TEXTURE_UFO);
-	player.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - player.height / 2);
+	//Setup user1
+	User user1(TEXTURE_UFO);
+	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
 
 	//Setup enemy1
 	Robot robot1(TEXTURE_UFO);
@@ -103,11 +103,11 @@ void startGame() {
 	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
 
 	//Add enemies
-	player.enemies.push_back(&robot1);
-	player.enemies.push_back(&robot2);
-	robot1.enemies.push_back(&player);
+	user1.enemies.push_back(&robot1);
+	user1.enemies.push_back(&robot2);
+	robot1.enemies.push_back(&user1);
 	robot1.enemies.push_back(&robot2);
-	robot2.enemies.push_back(&player);
+	robot2.enemies.push_back(&user1);
 	robot2.enemies.push_back(&robot1);
 
 	//Game loop
@@ -126,20 +126,20 @@ void startGame() {
 			}
 		}
 
-		//Control player movement
-		if (player.exists()) {
-			player.move();
-			player.aim(sf::Mouse::getPosition(*WINDOW));
-			player.fire(TEXTURE_BULLET, BULLET_SPEED);
-			player.draw();
+		//Control user1 movement
+		if (user1.exists()) {
+			user1.move();
+			user1.aim(sf::Mouse::getPosition(*WINDOW));
+			user1.fire(BULLET_SPEED);
+			user1.draw();
 		}
 
 		//Control robot1 movement
 		if (robot1.exists()) {
 			robot1.move();
-			if (player.exists()) {
-				robot1.aim((sf::Vector2i) player.getPosition());
-				robot1.fire(TEXTURE_BULLET, BULLET_SPEED);
+			if (user1.exists()) {
+				robot1.aim((sf::Vector2i) user1.getPosition());
+				robot1.fire(BULLET_SPEED);
 			}
 			robot1.draw();
 		}
@@ -147,9 +147,9 @@ void startGame() {
 		//Control robot2 movement
 		if (robot2.exists()) {
 			robot2.move();
-			if (player.exists()) {
-				robot2.aim((sf::Vector2i) player.getPosition());
-				robot2.fire(TEXTURE_BULLET, BULLET_SPEED);
+			if (user1.exists()) {
+				robot2.aim((sf::Vector2i) user1.getPosition());
+				robot2.fire(BULLET_SPEED);
 			}
 			robot2.draw();
 		}

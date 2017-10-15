@@ -26,10 +26,10 @@ void User::move() {
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
 }
 
-void User::fire(sf::Texture* textureBullet, float bulletSpeed) {
+void User::fire(float bulletSpeed) {
 	if (CLOCK->getElapsedTime().asMilliseconds() % 100 == 0) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) | sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-			Bullet bullet(textureBullet); //Create new bullet
+			Bullet bullet; //Create new bullet
 			bullet.setPosition(this->getPosition());
 			bullet.aim(sf::Mouse::getPosition(*WINDOW));
 			bullets.push_back(bullet); //Add new bullet to list

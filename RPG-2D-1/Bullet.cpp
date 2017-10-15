@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(sf::Texture* texture) : Sprite(texture) {
+Bullet::Bullet() : Sprite(TEXTURE_BULLET) {
 	
 }
 

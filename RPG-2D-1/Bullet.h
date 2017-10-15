@@ -6,7 +6,7 @@
 
 class Bullet : public Sprite {
 public:
-	Bullet(sf::Texture* texture);
+	Bullet();
 	static sf::Vector2f Bullet::calculateAngle(Bullet& bullet);
 	sf::Clock* clock;
 };
