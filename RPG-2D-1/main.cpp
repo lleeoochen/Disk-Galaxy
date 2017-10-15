@@ -2,6 +2,7 @@
 #include <iostream>
 #include <math.h>
 #include "Global.h"
+#include "Score.h"
 #include "Sprite.h"
 #include "Player.h"
 #include "User.h"
@@ -39,6 +40,7 @@ void initialize() {
 	CLOCK = new sf::Clock();
 	TEXTURE_GALAXY = new sf::Texture (getTexture("galaxy.png"));
 	TEXTURE_BUTTON = new sf::Texture(getTexture("StartButton.png"));
+	TEXTURE_UFO_ENEMY = new sf::Texture(getTexture("ufo.png"));
 	TEXTURE_UFO = new sf::Texture(getTexture("ufo_4.png"));
 	TEXTURE_BULLET = new sf::Texture(getTexture("bullet.png"));
 	TEXTURE_EXPLOSION = new sf::Texture(getTexture("explosion.png"));
@@ -96,21 +98,23 @@ void startLogin() {
 //Start game
 void startGame() {
 
-	//Setup window
+	//Setup background
 	Sprite background(TEXTURE_GALAXY);
+
+	//Setup score board
+	Score score;
 
 	//Setup user1
 	User user1(TEXTURE_UFO);
 	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
 
 	//Setup enemy1
-	Robot robot1(TEXTURE_UFO);
+	Robot robot1(TEXTURE_UFO_ENEMY);
 	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
 
 	//Setup enemy2
-	Robot robot2(TEXTURE_UFO);
+	Robot robot2(TEXTURE_UFO_ENEMY);
 	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
-	robot2.health.setHealth(10);
 
 	//Add enemies
 	user1.enemies.push_back(&robot1);
@@ -138,6 +142,7 @@ void startGame() {
 
 		//Control user1 movement
 		if (user1.exists()) {
+			user1.updateEnemies();
 			user1.move();
 			user1.aim(sf::Mouse::getPosition(*WINDOW));
 			user1.fire(BULLET_SPEED);
@@ -153,8 +158,10 @@ void startGame() {
 
 		//Control robot1 movement
 		if (robot1.exists()) {
+			robot1.updateEnemies();
 			robot1.move();
-			robot1.aim((sf::Vector2i) user1.getPosition());
+			if (robot1.enemies.size() != 0)
+				robot1.aim((sf::Vector2i) (*robot1.enemies[0]).getPosition());
 			robot1.fire(BULLET_SPEED);
 			robot1.draw();
 		}
@@ -168,8 +175,10 @@ void startGame() {
 
 		//Control robot2 movement
 		if (robot2.exists()) {
+			robot2.updateEnemies();
 			robot2.move();
-			robot2.aim((sf::Vector2i) user1.getPosition());
+			if (robot2.enemies.size() != 0)
+				robot2.aim((sf::Vector2i) (*robot2.enemies[0]).getPosition());
 			robot2.fire(BULLET_SPEED);
 			robot2.draw();
 		}
@@ -180,6 +189,8 @@ void startGame() {
 				robot2.draw();
 			}
 		}
+
+		score.draw();
 
 		//Draw objects
 		WINDOW->display();

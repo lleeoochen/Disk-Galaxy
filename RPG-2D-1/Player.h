@@ -9,12 +9,13 @@ public:
 	Player(sf::Texture* texture);
 	bool exists();
 	void draw();
+	void updateEnemies();
 	void setPosition(float x, float y);
 	void fireAll(float bulletSpeed);
 	virtual void move() {};
 	virtual void fire(float bulletSpeed) {};
 
-	const float SPEED = 0.5;
+	const float SPEED = 0.3;
 	float deathTime = 0.f;
 	std::vector<Player*> enemies;
 	std::vector<Bullet> bullets;

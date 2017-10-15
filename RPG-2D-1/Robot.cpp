@@ -49,7 +49,7 @@ void Robot::move() {
 
 void Robot::fire(float bulletSpeed) {
 
-	if (CLOCK->getElapsedTime().asMilliseconds() % 200 == 0) {
+	if (CLOCK->getElapsedTime().asMilliseconds() % 200 == 0 && enemies.size() != 0) {
 		Bullet bullet; //Create new bullet
 		bullet.setPosition(this->getPosition());
 		bullet.setRotation(this->getRotation());

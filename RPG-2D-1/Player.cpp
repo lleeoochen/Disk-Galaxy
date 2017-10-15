@@ -14,6 +14,16 @@ void Player::draw() {
 	health.draw();
 }
 
+void Player::updateEnemies() {
+	for (int i = 0; i < enemies.size(); i++) {
+		Player* enemy = enemies[i];
+		if (!enemy->exists()) {
+			enemies.erase(enemies.begin() + i);
+			i--;
+		}
+	}
+}
+
 void Player::setPosition(float x, float y) {
 	Sprite::setPosition(x, y);
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
