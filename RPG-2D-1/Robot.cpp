@@ -4,6 +4,29 @@ Robot::Robot(sf::Texture * texture) : Player(texture) {
 	direction = 0;
 }
 
+void Robot::act() {
+	if (exists()) {
+		updateEnemies();
+		move();
+		if (enemies.size() != 0)
+			aim((sf::Vector2i) (*enemies[0]).getPosition());
+		fire();
+		draw();
+	}
+	else {
+		if (deathTime == 0.f) {
+			deathTime = CLOCK->getElapsedTime().asSeconds();
+		}
+		if (CLOCK->getElapsedTime().asSeconds() - deathTime < 0.5) {
+			setTexture(*TEXTURE_EXPLOSION);
+			draw();
+		}
+		else {
+			exploded = true;
+		}
+	}
+}
+
 void Robot::move() {
 
 	//Change direction every 0.5 seconds
@@ -47,7 +70,7 @@ void Robot::move() {
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
 }
 
-void Robot::fire(float bulletSpeed) {
+void Robot::fire() {
 
 	if (CLOCK->getElapsedTime().asMilliseconds() % 200 == 0 && enemies.size() != 0) {
 		Bullet bullet; //Create new bullet
@@ -56,5 +79,5 @@ void Robot::fire(float bulletSpeed) {
 		bullets.push_back(bullet); //Add new bullet to list
 	}
 
-	fireAll(bulletSpeed);
+	fireAll(BULLET_SPEED);
 }

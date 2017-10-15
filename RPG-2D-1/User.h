@@ -4,6 +4,7 @@
 class User : public Player {
 public:
 	User(sf::Texture* texture);
+	void act();
 	void move();
-	void fire(float bulletSpeed);
+	void fire();
 };

@@ -6,8 +6,9 @@
 class Robot : public Player {
 public:
 	Robot(sf::Texture* texture);
+	void act();
 	void move();
-	void fire(float bulletSpeed);
+	void fire();
 private:
 	int direction;
 };

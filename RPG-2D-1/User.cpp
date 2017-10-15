@@ -4,6 +4,29 @@ User::User(sf::Texture* texture) : Player(texture) {
 
 }
 
+void User::act() {
+
+	if (exists()) {
+		updateEnemies();
+		move();
+		aim(sf::Mouse::getPosition(*WINDOW));
+		fire();
+		draw();
+	}
+	else {
+		if (deathTime == 0.f) { 
+			deathTime = CLOCK->getElapsedTime().asSeconds(); 
+		}
+		if (CLOCK->getElapsedTime().asSeconds() - deathTime < 0.5) {
+			setTexture(*TEXTURE_EXPLOSION);
+			draw();
+		}
+		else {
+			exploded = true;
+		}
+	}
+}
+
 void User::move() {
 	sf::Vector2f velocity(0.f, 0.f);
 
@@ -26,7 +49,7 @@ void User::move() {
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
 }
 
-void User::fire(float bulletSpeed) {
+void User::fire() {
 	if (CLOCK->getElapsedTime().asMilliseconds() % 100 == 0) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) | sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 			Bullet bullet; //Create new bullet
@@ -35,5 +58,5 @@ void User::fire(float bulletSpeed) {
 			bullets.push_back(bullet); //Add new bullet to list
 		}
 	}
-	fireAll(bulletSpeed);
+	fireAll(BULLET_SPEED);
 }

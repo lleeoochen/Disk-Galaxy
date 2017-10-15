@@ -10,13 +10,12 @@
 #include "Bullet.h"
 
 //Variables
-const float BULLET_SPEED = 1;
 sf::Vector2i WIN_SIZE;
-bool toGame = false;
+bool toGame = true;
 
 //Functions
 void initialize();
-void startLogin();
+void preGame();
 void startGame();
 void deletePointers();
 template<class T> T getAsset(std::string filename);
@@ -25,8 +24,11 @@ template<class T> T getAsset(std::string filename);
 int main() {
 
 	initialize(); //Intialize pointers
-	startLogin(); //Display startup screen
-	if(toGame) startGame(); //Display gaming screen
+	while (toGame) {
+		preGame(); //Display startup screen
+		if (toGame) 
+			startGame(); //Display gaming screen
+	}
 	deletePointers(); //Delete pointers
 
 	return 0;
@@ -48,7 +50,7 @@ void initialize() {
 
 
 //Start login
-void startLogin() {
+void preGame() {
 
 	//Setup title
 	sf::Text title;
@@ -100,21 +102,19 @@ void startGame() {
 	//Setup background
 	Sprite background(TEXTURE_GALAXY);
 
+	//Setup players
+	User user1(TEXTURE_UFO);
+	Robot robot1(TEXTURE_UFO_ENEMY);
+	Robot robot2(TEXTURE_UFO_ENEMY);
+
+	//Setup positions
+	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
+	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
+	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
+
 	//Setup score board
 	Score scoreboard;
-
-	//Setup user1
-	User user1(TEXTURE_UFO);
-	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
 	user1.trackScore(&scoreboard);
-
-	//Setup enemy1
-	Robot robot1(TEXTURE_UFO_ENEMY);
-	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
-
-	//Setup enemy2
-	Robot robot2(TEXTURE_UFO_ENEMY);
-	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
 
 	//Add enemies
 	user1.enemies.push_back(&robot1);
@@ -140,58 +140,16 @@ void startGame() {
 			}
 		}
 
-		//Control user1 movement
-		if (user1.exists()) {
-			user1.updateEnemies();
-			user1.move();
-			user1.aim(sf::Mouse::getPosition(*WINDOW));
-			user1.fire(BULLET_SPEED);
-			user1.draw();
-		}
-		else {
-			if (user1.deathTime == 0.f) user1.deathTime = CLOCK->getElapsedTime().asSeconds();
-			if (CLOCK->getElapsedTime().asSeconds() - user1.deathTime < 0.5) {
-				user1.setTexture(*TEXTURE_EXPLOSION);
-				user1.draw();
-			}
-		}
-
-		//Control robot1 movement
-		if (robot1.exists()) {
-			robot1.updateEnemies();
-			robot1.move();
-			if (robot1.enemies.size() != 0)
-				robot1.aim((sf::Vector2i) (*robot1.enemies[0]).getPosition());
-			robot1.fire(BULLET_SPEED);
-			robot1.draw();
-		}
-		else {
-			if (robot1.deathTime == 0.f) robot1.deathTime = CLOCK->getElapsedTime().asSeconds();
-			if (CLOCK->getElapsedTime().asSeconds() - robot1.deathTime < 0.5) {
-				robot1.setTexture(*TEXTURE_EXPLOSION);
-				robot1.draw();
-			}
-		}
-
-		//Control robot2 movement
-		if (robot2.exists()) {
-			robot2.updateEnemies();
-			robot2.move();
-			if (robot2.enemies.size() != 0)
-				robot2.aim((sf::Vector2i) (*robot2.enemies[0]).getPosition());
-			robot2.fire(BULLET_SPEED);
-			robot2.draw();
-		}
-		else {
-			if (robot2.deathTime == 0.f) robot2.deathTime = CLOCK->getElapsedTime().asSeconds();
-			if (CLOCK->getElapsedTime().asSeconds() - robot2.deathTime < 0.5) {
-				robot2.setTexture(*TEXTURE_EXPLOSION);
-				robot2.draw();
-			}
-		}
+		//Players act
+		user1.act();
+		robot1.act();
+		robot2.act();
 
 		//Draw objects
 		WINDOW->display();
+
+		if (user1.exploded || (robot1.exploded && robot2.exploded))
+			return; //Game over
 	}
 }
 
