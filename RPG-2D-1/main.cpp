@@ -13,22 +13,25 @@ const float BULLET_SPEED = 1;
 sf::Vector2i WIN_SIZE;
 bool toGame = false;
 
+//Functions
 void initialize();
 void startLogin();
 void startGame();
 void deletePointers();
-
 sf::Texture getTexture(std::string filename);
 sf::Font getFont(std::string filename);
 
 //Main
 int main() {
-	initialize();
-	startLogin();
-	if(toGame) startGame();
-	deletePointers();
+
+	initialize(); //Intialize pointers
+	startLogin(); //Display startup screen
+	if(toGame) startGame(); //Display gaming screen
+	deletePointers(); //Delete pointers
+
 	return 0;
 }
+
 
 //Initialize global pointers
 void initialize() {
@@ -38,12 +41,15 @@ void initialize() {
 	TEXTURE_BUTTON = new sf::Texture(getTexture("StartButton.png"));
 	TEXTURE_UFO = new sf::Texture(getTexture("ufo.png"));
 	TEXTURE_BULLET = new sf::Texture(getTexture("bullet.png"));
+	TEXTURE_EXPLOSION = new sf::Texture(getTexture("explosion.png"));
 	FONT = getFont("summit.ttf");
 }
+
 
 //Start login
 void startLogin() {
 
+	//Setup title
 	sf::Text title;
 	title.setString("Welcome to Disk Galaxy!");
 	title.setFont(FONT);
@@ -51,7 +57,10 @@ void startLogin() {
 	title.setCharacterSize(30);
 	title.setFillColor(sf::Color::White);
 
+	//Setup background
 	Sprite background(TEXTURE_GALAXY);
+
+	//Setup button
 	Sprite button(TEXTURE_BUTTON);
 	button.setPosition(WINDOW->getSize().x / 2 - button.width / 2, WINDOW->getSize().y * 3 / 4 - button.height / 2);
 
@@ -101,6 +110,7 @@ void startGame() {
 	//Setup enemy2
 	Robot robot2(TEXTURE_UFO);
 	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
+	robot2.health.setHealth(10);
 
 	//Add enemies
 	user1.enemies.push_back(&robot1);
@@ -133,25 +143,42 @@ void startGame() {
 			user1.fire(BULLET_SPEED);
 			user1.draw();
 		}
+		else {
+			if (user1.deathTime == 0.f) user1.deathTime = CLOCK->getElapsedTime().asSeconds();
+			if (CLOCK->getElapsedTime().asSeconds() - user1.deathTime < 0.5) {
+				user1.setTexture(*TEXTURE_EXPLOSION);
+				user1.draw();
+			}
+		}
 
 		//Control robot1 movement
 		if (robot1.exists()) {
 			robot1.move();
-			if (user1.exists()) {
-				robot1.aim((sf::Vector2i) user1.getPosition());
-				robot1.fire(BULLET_SPEED);
-			}
+			robot1.aim((sf::Vector2i) user1.getPosition());
+			robot1.fire(BULLET_SPEED);
 			robot1.draw();
+		}
+		else {
+			if (robot1.deathTime == 0.f) robot1.deathTime = CLOCK->getElapsedTime().asSeconds();
+			if (CLOCK->getElapsedTime().asSeconds() - robot1.deathTime < 0.5) {
+				robot1.setTexture(*TEXTURE_EXPLOSION);
+				robot1.draw();
+			}
 		}
 
 		//Control robot2 movement
 		if (robot2.exists()) {
 			robot2.move();
-			if (user1.exists()) {
-				robot2.aim((sf::Vector2i) user1.getPosition());
-				robot2.fire(BULLET_SPEED);
-			}
+			robot2.aim((sf::Vector2i) user1.getPosition());
+			robot2.fire(BULLET_SPEED);
 			robot2.draw();
+		}
+		else {
+			if (robot2.deathTime == 0.f) robot2.deathTime = CLOCK->getElapsedTime().asSeconds();
+			if (CLOCK->getElapsedTime().asSeconds() - robot2.deathTime < 0.5) {
+				robot2.setTexture(*TEXTURE_EXPLOSION);
+				robot2.draw();
+			}
 		}
 
 		//Draw objects
@@ -172,7 +199,7 @@ void deletePointers() {
 //Get texture from file
 sf::Texture getTexture(std::string filename) {
 	sf::Texture texture;
-	if (!texture.loadFromFile(filename))
+	if (!texture.loadFromFile("Assets/" + filename))
 		std::cout << filename << " not found." << std::endl;
 	return texture;
 }
@@ -180,7 +207,7 @@ sf::Texture getTexture(std::string filename) {
 //Get font from file
 sf::Font getFont(std::string filename) {
 	sf::Font font;
-	if (!font.loadFromFile(filename))
+	if (!font.loadFromFile("Assets/" + filename))
 		std::cout << filename << " not found." << std::endl;
 	return font;
 }

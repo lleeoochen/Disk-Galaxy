@@ -15,6 +15,7 @@ public:
 	virtual void fire(float bulletSpeed) {};
 
 	const float SPEED = 0.5;
+	float deathTime = 0.f;
 	std::vector<Player*> enemies;
 	std::vector<Bullet> bullets;
 	std::vector<Player*> flashes;

@@ -10,6 +10,3 @@ public:
 	static sf::Vector2f Bullet::calculateAngle(Bullet& bullet);
 	sf::Clock* clock;
 };
-
-
-static bool AVAILABLE = true;
