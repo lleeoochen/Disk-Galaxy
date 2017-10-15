@@ -39,7 +39,7 @@ void initialize() {
 	CLOCK = new sf::Clock();
 	TEXTURE_GALAXY = new sf::Texture (getTexture("galaxy.png"));
 	TEXTURE_BUTTON = new sf::Texture(getTexture("StartButton.png"));
-	TEXTURE_UFO = new sf::Texture(getTexture("ufo.png"));
+	TEXTURE_UFO = new sf::Texture(getTexture("ufo_4.png"));
 	TEXTURE_BULLET = new sf::Texture(getTexture("bullet.png"));
 	TEXTURE_EXPLOSION = new sf::Texture(getTexture("explosion.png"));
 	FONT = getFont("summit.ttf");
