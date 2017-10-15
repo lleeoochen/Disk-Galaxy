@@ -19,8 +19,7 @@ void initialize();
 void startLogin();
 void startGame();
 void deletePointers();
-sf::Texture getTexture(std::string filename);
-sf::Font getFont(std::string filename);
+template<class T> T getAsset(std::string filename);
 
 //Main
 int main() {
@@ -38,13 +37,13 @@ int main() {
 void initialize() {
 	WINDOW = new sf::RenderWindow(sf::VideoMode(960, 540), "Disk Galaxy", sf::Style::Titlebar | sf::Style::Default);
 	CLOCK = new sf::Clock();
-	TEXTURE_GALAXY = new sf::Texture (getTexture("galaxy.png"));
-	TEXTURE_BUTTON = new sf::Texture(getTexture("StartButton.png"));
-	TEXTURE_UFO_ENEMY = new sf::Texture(getTexture("ufo.png"));
-	TEXTURE_UFO = new sf::Texture(getTexture("ufo_4.png"));
-	TEXTURE_BULLET = new sf::Texture(getTexture("bullet.png"));
-	TEXTURE_EXPLOSION = new sf::Texture(getTexture("explosion.png"));
-	FONT = getFont("summit.ttf");
+	TEXTURE_GALAXY = new sf::Texture (getAsset<sf::Texture>("galaxy.png"));
+	TEXTURE_BUTTON = new sf::Texture(getAsset<sf::Texture>("StartButton.png"));
+	TEXTURE_UFO_ENEMY = new sf::Texture(getAsset<sf::Texture>("ufo.png"));
+	TEXTURE_UFO = new sf::Texture(getAsset<sf::Texture>("ufo_4.png"));
+	TEXTURE_BULLET = new sf::Texture(getAsset<sf::Texture>("bullet.png"));
+	TEXTURE_EXPLOSION = new sf::Texture(getAsset<sf::Texture>("explosion.png"));
+	FONT = getAsset<sf::Font>("summit.ttf");
 }
 
 
@@ -207,17 +206,10 @@ void deletePointers() {
 }
 
 //Get texture from file
-sf::Texture getTexture(std::string filename) {
-	sf::Texture texture;
-	if (!texture.loadFromFile("Assets/" + filename))
+template<class T>
+T getAsset(std::string filename) {
+	T obj;
+	if (!obj.loadFromFile("Assets/" + filename))
 		std::cout << filename << " not found." << std::endl;
-	return texture;
-}
-
-//Get font from file
-sf::Font getFont(std::string filename) {
-	sf::Font font;
-	if (!font.loadFromFile("Assets/" + filename))
-		std::cout << filename << " not found." << std::endl;
-	return font;
+	return obj;
 }
