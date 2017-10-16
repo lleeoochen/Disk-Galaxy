@@ -8,10 +8,10 @@ public:
 	void aim(sf::Vector2i position);
 	void draw();
 
-	int width;
-	int height;
-	float window_width;
-	float window_height;
+	float width;
+	float height;
+	int window_width;
+	int window_height;
 };
 
-static const double PI = 3.1415926;
+static const float PI = 3.1415926f;

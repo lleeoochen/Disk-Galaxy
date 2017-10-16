@@ -77,8 +77,8 @@ void preGame() {
 				WINDOW->close();
 			if (event.type == sf::Event::MouseButtonPressed) {
 				sf::Vector2i mouse = sf::Mouse::getPosition(*WINDOW);
-				int dx = mouse.x - button.getPosition().x;
-				int dy = mouse.y - button.getPosition().y;
+				float dx = mouse.x - button.getPosition().x;
+				float dy = mouse.y - button.getPosition().y;
 				if (dx >= 0 && dy >= 0 && dx <= button.width && dy <= button.height) {
 					toGame = true;
 					return;
@@ -106,11 +106,6 @@ void startGame() {
 	User user1(TEXTURE_UFO);
 	Robot robot1(TEXTURE_UFO_ENEMY);
 	Robot robot2(TEXTURE_UFO_ENEMY);
-
-	//Setup positions
-	user1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y - user1.height / 2);
-	robot1.setPosition(WINDOW->getSize().x / 2, WINDOW->getSize().y / 2);
-	robot2.setPosition(WINDOW->getSize().x / 4, WINDOW->getSize().y / 4);
 
 	//Setup score board
 	Score scoreboard;
@@ -145,7 +140,7 @@ void startGame() {
 		robot1.act();
 		robot2.act();
 
-		//Draw objects
+		//Draw players
 		WINDOW->display();
 
 		if (user1.exploded || (robot1.exploded && robot2.exploded))

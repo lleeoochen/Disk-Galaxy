@@ -12,21 +12,22 @@ public:
 	void draw();
 	void updateEnemies();
 	void setPosition(float x, float y);
-	void fireAll(float bulletSpeed);
+	void fireAll();
 	void trackScore(Score* score);
-
+	void removeFlashes();
+	bool enemyShot(Bullet& bullet);
 	virtual void act() {};
 	virtual void move() {};
 	virtual void fire(float bulletSpeed) {};
 
-	float SPEED = 0.3; 
-	float BULLET_SPEED = 1;
-	float deathTime = 0.f;
-	int score = 0;
-	bool exploded = false;
-	std::vector<Player*> enemies;
-	std::vector<Bullet> bullets;
-	std::vector<Player*> flashes;
+	float player_speed; 
+	float deathTime;
+	int team;
+	int score;
+	bool exploded;
 	Health health;
 	Score* scoreboard;
+	std::vector<Player*> enemies;
+	std::vector<Player*> flashes;
+	std::vector<Bullet> bullets;
 };

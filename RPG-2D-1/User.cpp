@@ -32,13 +32,13 @@ void User::move() {
 
 	//Four movement direction and boundary check
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) && this->getPosition().x - this->width / 2 >= 0)
-		velocity.x -= SPEED;
+		velocity.x -= player_speed;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) && this->getPosition().x + this->height / 2 <= window_width)
-		velocity.x += SPEED;
+		velocity.x += player_speed;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) && this->getPosition().y - this->width / 2 >= 0)
-		velocity.y -= SPEED;
+		velocity.y -= player_speed;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) && this->getPosition().y + this->height / 2 <= window_height)
-		velocity.y += SPEED;
+		velocity.y += player_speed;
 
 	//Diagonal movement (/sqrt(2))
 	if (velocity.x != 0 && velocity.y != 0)
@@ -55,8 +55,9 @@ void User::fire() {
 			Bullet bullet; //Create new bullet
 			bullet.setPosition(this->getPosition());
 			bullet.aim(sf::Mouse::getPosition(*WINDOW));
+			bullet.setVelocity();
 			bullets.push_back(bullet); //Add new bullet to list
 		}
 	}
-	fireAll(BULLET_SPEED);
+	fireAll();
 }

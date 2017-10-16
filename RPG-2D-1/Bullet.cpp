@@ -1,7 +1,15 @@
 #include "Bullet.h"
 
 Bullet::Bullet() : Sprite(TEXTURE_BULLET) {
-	
+	bullet_speed = 1;
+}
+
+void Bullet::setVelocity() {
+	velocity = Bullet::calculateAngle(*this);
+	velocity.x *= bullet_speed;
+	velocity.y *= bullet_speed;
+	if (velocity.x != 0 && velocity.y != 0) 
+		velocity /= std::sqrt(2.f);
 }
 
 sf::Vector2f Bullet::calculateAngle(Bullet& bullet) {

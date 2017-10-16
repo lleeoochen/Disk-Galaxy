@@ -7,6 +7,9 @@
 class Bullet : public Sprite {
 public:
 	Bullet();
+	void setVelocity();
 	static sf::Vector2f Bullet::calculateAngle(Bullet& bullet);
 	sf::Clock* clock;
+	sf::Vector2f velocity;
+	float bullet_speed;
 };

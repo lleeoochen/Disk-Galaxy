@@ -34,7 +34,7 @@ void Robot::move() {
 		direction = (int)(rand() % 4);
 
 	//Set speed
-	float speed = (rand() % 4) / 10.0;
+	float speed = (rand() % 4) / 10.f;
 
 	//Create vector from direction and speed
 	sf::Vector2f velocity;
@@ -76,8 +76,9 @@ void Robot::fire() {
 		Bullet bullet; //Create new bullet
 		bullet.setPosition(this->getPosition());
 		bullet.setRotation(this->getRotation());
+		bullet.setVelocity();
 		bullets.push_back(bullet); //Add new bullet to list
 	}
 
-	fireAll(BULLET_SPEED);
+	fireAll();
 }
