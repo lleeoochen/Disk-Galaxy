@@ -50,7 +50,7 @@ void User::move() {
 }
 
 void User::fire() {
-	if (CLOCK->getElapsedTime().asMilliseconds() % 100 == 0) {
+	if (CLOCK->getElapsedTime().asMilliseconds() % 50 == 0) {
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left) | sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
 			Bullet bullet; //Create new bullet
 			bullet.setPosition(this->getPosition());

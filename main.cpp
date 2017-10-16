@@ -99,25 +99,27 @@ void preGame() {
 //Start game
 void startGame() {
 
+	//Reset clock
+	CLOCK->restart();
+
 	//Setup background
 	Sprite background(TEXTURE_GALAXY);
 
 	//Setup players
 	User user1(TEXTURE_UFO);
-	Robot robot1(TEXTURE_UFO_ENEMY);
+	Robot robot1(TEXTURE_UFO);
 	Robot robot2(TEXTURE_UFO_ENEMY);
+	Robot robot3(TEXTURE_UFO_ENEMY);
 
 	//Setup score board
 	Score scoreboard;
 	user1.trackScore(&scoreboard);
 
 	//Add enemies
-	user1.enemies.push_back(&robot1);
-	user1.enemies.push_back(&robot2);
-	robot1.enemies.push_back(&user1);
-	robot1.enemies.push_back(&robot2);
-	robot2.enemies.push_back(&user1);
-	robot2.enemies.push_back(&robot1);
+	user1.id = 0; user1.team = 0;
+	robot1.id = 1; robot1.team = 0;
+	robot2.id = 2; robot2.team = 1;
+	robot3.id = 3; robot3.team = 1;
 
 	//Game loop
 	while (WINDOW->isOpen()) {
@@ -139,11 +141,12 @@ void startGame() {
 		user1.act();
 		robot1.act();
 		robot2.act();
+		robot3.act();
 
 		//Draw players
 		WINDOW->display();
 
-		if (user1.exploded || (robot1.exploded && robot2.exploded))
+		if (!user1.exists() || user1.enemies.size() == 0)
 			return; //Game over
 	}
 }

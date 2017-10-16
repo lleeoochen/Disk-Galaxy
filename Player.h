@@ -22,6 +22,7 @@ public:
 
 	float player_speed; 
 	float deathTime;
+	int id;
 	int team;
 	int score;
 	bool exploded;
@@ -30,4 +31,5 @@ public:
 	std::vector<Player*> enemies;
 	std::vector<Player*> flashes;
 	std::vector<Bullet> bullets;
+	static std::vector<Player*> players;
 };

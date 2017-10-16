@@ -1,4 +1,5 @@
 #include "Player.h"
+std::vector<Player*> Player::players;
 
 Player::Player(sf::Texture* texture) : Sprite(texture) {
 	this->setOrigin(this->width / 2, this->height / 2);
@@ -6,11 +7,13 @@ Player::Player(sf::Texture* texture) : Sprite(texture) {
 		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().x, 
 		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().y);
 	health = Health();
+	id = 0;
 	team = 0;
 	score = 0;
 	deathTime = 0;
 	player_speed = 0.3f;
 	exploded = false;
+	players.push_back(this);
 }
 
 bool Player::exists() {
@@ -28,6 +31,28 @@ void Player::draw() {
 }
 
 void Player::updateEnemies() {
+
+	//Add new enemy
+	for (unsigned int i = 0; i < players.size(); i++) {
+		Player* player = players[i];
+
+		//Different team
+		if (player->team != this->team) {
+			bool tracked = false;
+
+			//Check if enemy is tracked
+			for (unsigned int j = 0; j < enemies.size() && !tracked; j++) {
+				Player* enemy = enemies[j];
+				if (player->id == enemy->id) tracked = true;
+			}
+
+			//Add if not tracked
+			if (!tracked) 
+				enemies.push_back(player);
+		}
+	}
+
+	//Delete dead enemy
 	for (unsigned int i = 0; i < enemies.size(); i++) {
 		Player* enemy = enemies[i];
 		if (!enemy->exists()) {
