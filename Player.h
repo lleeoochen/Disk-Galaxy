@@ -10,7 +10,6 @@ public:
 	Player(sf::Texture* texture);
 	bool exists();
 	void draw();
-	void updateEnemies();
 	void setPosition(float x, float y);
 	void fireAll();
 	void trackScore(Score* score);
@@ -19,6 +18,7 @@ public:
 	virtual void act() {};
 	virtual void move() {};
 	virtual void fire(float bulletSpeed) {};
+	virtual void updateEnemies() {};
 
 	float player_speed; 
 	float deathTime;

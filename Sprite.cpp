@@ -22,3 +22,7 @@ void Sprite::aim(sf::Vector2i position) { //genrify to position vector
 void Sprite::draw() {
 	WINDOW->draw(*this);
 }
+
+float Sprite::getDistance(Sprite other) {
+	return sqrt(powf(this->getPosition().x - other.getPosition().x, 2) + powf(this->getPosition().y - other.getPosition().y, 2));
+}

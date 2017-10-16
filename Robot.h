@@ -9,6 +9,7 @@ public:
 	void act();
 	void move();
 	void fire();
+	void updateEnemies();
 private:
 	int direction;
 };

@@ -12,11 +12,13 @@
 //Variables
 sf::Vector2i WIN_SIZE;
 bool toGame = true;
+float gameOverTime = 0.f;
+const float gameOverDelay = 1.f;
 
 //Functions
 void initialize();
-void preGame();
-void startGame();
+void preGame(std::string message);
+bool startGame();
 void deletePointers();
 template<class T> T getAsset(std::string filename);
 
@@ -24,10 +26,17 @@ template<class T> T getAsset(std::string filename);
 int main() {
 
 	initialize(); //Intialize pointers
+	preGame("Welcome to Disk Galaxy!"); //Display startup screen
 	while (toGame) {
-		preGame(); //Display startup screen
-		if (toGame) 
-			startGame(); //Display gaming screen
+		bool won;
+		if (toGame) {
+			won = startGame(); //Display gaming screen
+
+			if (won) 
+				preGame("You Won!");
+			else     
+				preGame("You Lost...");
+		}
 	}
 	deletePointers(); //Delete pointers
 
@@ -50,11 +59,11 @@ void initialize() {
 
 
 //Start login
-void preGame() {
+void preGame(std::string message) {
 
 	//Setup title
 	sf::Text title;
-	title.setString("Welcome to Disk Galaxy!");
+	title.setString(message);
 	title.setFont(FONT);
 	title.setPosition(WINDOW->getSize().x / 2 - title.getGlobalBounds().width / 2, WINDOW->getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
 	title.setCharacterSize(30);
@@ -97,10 +106,11 @@ void preGame() {
 }
 
 //Start game
-void startGame() {
+bool startGame() {
 
 	//Reset clock
 	CLOCK->restart();
+	gameOverTime = 0.f;
 
 	//Setup background
 	Sprite background(TEXTURE_GALAXY);
@@ -133,7 +143,7 @@ void startGame() {
 		while (WINDOW->pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				WINDOW->close();
-				return;
+				return false;
 			}
 		}
 
@@ -146,9 +156,16 @@ void startGame() {
 		//Draw players
 		WINDOW->display();
 
-		if (!user1.exists() || user1.enemies.size() == 0)
-			return; //Game over
+		if (!user1.exists() || user1.enemies.size() == 0) {
+			if (gameOverTime == 0.f)
+				gameOverTime = CLOCK->getElapsedTime().asSeconds();
+
+			if (CLOCK->getElapsedTime().asSeconds() - gameOverTime >= gameOverDelay)
+				return user1.exists(); //Game over
+		}
 	}
+
+	return false;
 }
 
 //Delete all global pointers

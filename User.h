@@ -7,4 +7,5 @@ public:
 	void act();
 	void move();
 	void fire();
+	void updateEnemies();
 };

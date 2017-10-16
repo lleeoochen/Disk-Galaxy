@@ -61,3 +61,38 @@ void User::fire() {
 	}
 	fireAll();
 }
+
+
+
+
+void User::updateEnemies() {
+
+	//Add new enemy
+	for (unsigned int i = 0; i < players.size(); i++) {
+		Player* player = players[i];
+
+		//Different team
+		if (player->team != this->team) {
+			bool tracked = false;
+
+			//Check if enemy is tracked
+			for (unsigned int j = 0; j < enemies.size() && !tracked; j++) {
+				Player* enemy = enemies[j];
+				if (player->id == enemy->id) tracked = true;
+			}
+
+			//Add if not tracked
+			if (!tracked)
+				enemies.push_back(player);
+		}
+	}
+
+	//Delete dead enemy
+	for (unsigned int i = 0; i < enemies.size(); i++) {
+		Player* enemy = enemies[i];
+		if (!enemy->exists()) {
+			enemies.erase(enemies.begin() + i);
+			i--;
+		}
+	}
+}

@@ -48,7 +48,7 @@ void Robot::move() {
 		velocity = sf::Vector2f(0, -speed);
 
 	//Border check for left and right
-	if (this->getPosition().x - this->width / 2 + velocity.x <= 0 || this->getPosition().x + this->width / 2 + velocity.x >= WINDOW->getSize().x) {
+	if (this->getPosition().x - this->width / 2 + velocity.x <= 0 || this->getPosition().x + this->width / 2 + velocity.x >= window_width) {
 		velocity.x = -velocity.x;
 		if (direction == 0) 
 			direction = 1;
@@ -57,7 +57,7 @@ void Robot::move() {
 	}
 
 	//Border check for top and down
-	if (this->getPosition().y - this->height / 2 + velocity.y <= 0 || this->getPosition().y + this->height / 2 + velocity.y >= WINDOW->getSize().y) {
+	if (this->getPosition().y - this->height / 2 + velocity.y <= 0 || this->getPosition().y + this->height / 2 + velocity.y >= window_height) {
 		velocity.y = -velocity.y;
 		if (direction == 2)
 			direction = 3;
@@ -81,4 +81,37 @@ void Robot::fire() {
 	}
 
 	fireAll();
+}
+
+
+void Robot::updateEnemies() {
+
+	//Add new enemy
+	for (unsigned int i = 0; i < players.size(); i++) {
+		Player* player = players[i];
+
+		//Different team and in tracking area
+		if (player->team != this->team && this->getDistance(*player) <= 500) {
+			bool tracked = false;
+
+			//Check if enemy is tracked
+			for (unsigned int j = 0; j < enemies.size() && !tracked; j++) {
+				Player* enemy = enemies[j];
+				if (player->id == enemy->id) tracked = true;
+			}
+
+			//Add if not tracked
+			if (!tracked)
+				enemies.push_back(player);
+		}
+	}
+
+	//Delete dead enemy
+	for (unsigned int i = 0; i < enemies.size(); i++) {
+		Player* enemy = enemies[i];
+		if (!enemy->exists() || this->getDistance(*enemy) > 500) {
+			enemies.erase(enemies.begin() + i);
+			i--;
+		}
+	}
 }

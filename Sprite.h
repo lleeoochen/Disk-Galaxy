@@ -1,5 +1,6 @@
 #pragma once
 #include "Global.h"
+#include <iostream>
 #include <SFML/Graphics.hpp>
 
 class Sprite : public sf::Sprite {
@@ -7,6 +8,7 @@ public:
 	Sprite(sf::Texture* texture);
 	void aim(sf::Vector2i position);
 	void draw();
+	float getDistance(Sprite other);
 
 	float width;
 	float height;
