@@ -18,7 +18,7 @@ const float gameOverDelay = 1.f;
 //Functions
 void initialize();
 void preGame(std::string message);
-bool startGame();
+int startGame();
 void deletePointers();
 template<class T> T getAsset(std::string filename);
 
@@ -28,14 +28,15 @@ int main() {
 	initialize(); //Intialize pointers
 	preGame("Welcome to Disk Galaxy!"); //Display startup screen
 	while (toGame) {
-		bool won;
+		int score;
 		if (toGame) {
-			won = startGame(); //Display gaming screen
+			score = startGame(); //Display gaming screen
 
-			if (won) 
-				preGame("You Won!");
-			else     
-				preGame("You Lost...");
+			std::cout << score << std::endl;
+			if (score >= 0)
+				preGame("You Won!\n\nScore: " + std::to_string(score));
+			else
+				preGame("You Lost...\n\nScore: " + std::to_string(score));
 		}
 	}
 	deletePointers(); //Delete pointers
@@ -106,7 +107,7 @@ void preGame(std::string message) {
 }
 
 //Start game
-bool startGame() {
+int startGame() {
 
 	//Reset clock
 	CLOCK->restart();
@@ -160,12 +161,14 @@ bool startGame() {
 			if (gameOverTime == 0.f)
 				gameOverTime = CLOCK->getElapsedTime().asSeconds();
 
-			if (CLOCK->getElapsedTime().asSeconds() - gameOverTime >= gameOverDelay)
-				return user1.exists(); //Game over
+			if (CLOCK->getElapsedTime().asSeconds() - gameOverTime >= gameOverDelay) {
+				if (user1.exists())
+					return user1.score; //Game over
+				return -1;
+			}
 		}
 	}
-
-	return false;
+	return -1;
 }
 
 //Delete all global pointers
