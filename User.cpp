@@ -15,7 +15,8 @@ void User::act() {
 	}
 	else {
 		if (deathTime == 0.f) { 
-			deathTime = CLOCK->getElapsedTime().asSeconds(); 
+			deathTime = CLOCK->getElapsedTime().asSeconds();
+			score = -1;
 		}
 		if (CLOCK->getElapsedTime().asSeconds() - deathTime < 0.5) {
 			setTexture(*TEXTURE_EXPLOSION);

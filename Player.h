@@ -22,6 +22,7 @@ public:
 
 	float player_speed; 
 	float deathTime;
+	std::string name;
 	int id;
 	int team;
 	int score;

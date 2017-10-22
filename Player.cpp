@@ -7,6 +7,7 @@ Player::Player(sf::Texture* texture) : Sprite(texture) {
 		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().x, 
 		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().y);
 	health = Health();
+	name = "";
 	id = 0;
 	team = 0;
 	score = 0;

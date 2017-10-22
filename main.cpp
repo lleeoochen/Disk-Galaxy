@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <math.h>
 #include "Global.h"
 #include "Score.h"
@@ -11,6 +13,7 @@
 
 //Variables
 sf::Vector2i WIN_SIZE;
+const std::string high_score_path = "Data/high_score.csv";
 bool toGame = true;
 float gameOverTime = 0.f;
 const float gameOverDelay = 1.f;
@@ -18,9 +21,13 @@ const float gameOverDelay = 1.f;
 //Functions
 void initialize();
 void preGame(std::string message);
-int startGame();
+Player startGame();
 void deletePointers();
-template<class T> T getAsset(std::string filename);
+template<class T> T getAsset(std::string filename); 
+void addHighScore(std::string filename, std::string name, int score);
+int getHighScore(std::string filename, std::string name);
+void writeFile(std::string filename, std::string message);
+std::string readFile(std::string filename);
 
 //Main
 int main() {
@@ -28,15 +35,17 @@ int main() {
 	initialize(); //Intialize pointers
 	preGame("Welcome to Disk Galaxy!"); //Display startup screen
 	while (toGame) {
-		int score;
-		if (toGame) {
-			score = startGame(); //Display gaming screen
 
-			std::cout << score << std::endl;
-			if (score >= 0)
-				preGame("You Won!\n\nScore: " + std::to_string(score));
+		if (toGame) {
+			Player player = startGame(); //Display gaming screen
+
+			if (player.score >= getHighScore(high_score_path, player.name))
+				addHighScore(high_score_path, player.name, player.score);
+
+			if (player.score >= 0)
+				preGame("You Won!\n\nScore: " + std::to_string(player.score));
 			else
-				preGame("You Lost...\n\nScore: " + std::to_string(score));
+				preGame("You Lost...\n\nScore: " + std::to_string(player.score));
 		}
 	}
 	deletePointers(); //Delete pointers
@@ -107,7 +116,7 @@ void preGame(std::string message) {
 }
 
 //Start game
-int startGame() {
+Player startGame() {
 
 	//Reset clock
 	CLOCK->restart();
@@ -127,7 +136,7 @@ int startGame() {
 	user1.trackScore(&scoreboard);
 
 	//Add enemies
-	user1.id = 0; user1.team = 0;
+	user1.id = 0; user1.team = 0; user1.name = "Wei Tung";
 	robot1.id = 1; robot1.team = 0;
 	robot2.id = 2; robot2.team = 1;
 	robot3.id = 3; robot3.team = 1;
@@ -162,13 +171,12 @@ int startGame() {
 				gameOverTime = CLOCK->getElapsedTime().asSeconds();
 
 			if (CLOCK->getElapsedTime().asSeconds() - gameOverTime >= gameOverDelay) {
-				if (user1.exists())
-					return user1.score; //Game over
-				return -1;
+				return user1;
 			}
 		}
 	}
-	return -1;
+
+	return user1;
 }
 
 //Delete all global pointers
@@ -188,4 +196,49 @@ T getAsset(std::string filename) {
 	if (!obj.loadFromFile("Assets/" + filename))
 		std::cout << filename << " not found." << std::endl;
 	return obj;
+}
+
+//Write high score
+void addHighScore(std::string filename, std::string name, int score) {
+	writeFile(filename, name + "," + std::to_string(score));
+}
+
+//Read high score
+int getHighScore(std::string filename, std::string name) {
+	std::fstream data(filename);
+	std::string row, value = "";
+
+    while(std::getline(data, row)) {
+        std::stringstream lineStream(row);
+        std::string cell;
+        if (std::getline(lineStream, cell, ',') && cell == name) {
+        	std::getline(lineStream, cell, ',');
+        	value = cell;
+        }
+    }
+
+	if (value == "")
+		value = "-1";
+
+	std::cout << std::stoi(value) << std::endl;
+	return std::stoi(value);
+}
+
+
+
+//Write file
+void writeFile(std::string filename, std::string message) {
+	std::ofstream stream;
+	stream.open(filename);
+	stream << message << std::endl;
+	stream.close();
+}
+
+//Read file
+std::string readFile(std::string filename) {
+	std::fstream data(filename);
+	std::string row, value = "";
+	while (std::getline(data, row))
+		value += row;
+	return value;
 }
