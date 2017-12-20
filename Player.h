@@ -11,6 +11,7 @@ public:
 	bool exists();
 	void draw();
 	void setPosition(float x, float y);
+	void setPositionRandom();
 	void fireAll();
 	void trackScore(Score* score);
 	void removeFlashes();

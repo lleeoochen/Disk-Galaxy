@@ -3,9 +3,7 @@ std::vector<Player*> Player::players;
 
 Player::Player(sf::Texture* texture) : Sprite(texture) {
 	this->setOrigin(this->width / 2, this->height / 2);
-	this->setPosition(
-		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().x, 
-		CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * WINDOW->getSize().y);
+	this->setPositionRandom();
 	health = Health();
 	name = "";
 	id = 0;
@@ -34,6 +32,12 @@ void Player::draw() {
 void Player::setPosition(float x, float y) {
 	Sprite::setPosition(x, y);
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
+}
+
+void Player::setPositionRandom() {
+	float x = CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * (WINDOW->getSize().x - 2 * this->width) + this->width;
+	float y = CLOCK->getElapsedTime().asMicroseconds() % 100 / 100.f * (WINDOW->getSize().y - 2 * this->height) + this->height;
+	setPosition(x, y);
 }
 
 void Player::fireAll() {
