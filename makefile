@@ -1,6 +1,8 @@
-compile:
-	g++ -std=c++11 -o runGame *.cpp -lsfml-graphics -lsfml-window -lsfml-system
-run:
+all: compile run
+
+run: runGame
 	./runGame
 clean:
-	rm *.o runGame
+	rm runGame
+compile:
+	g++ -std=c++11 -o runGame *.cpp -lsfml-graphics -lsfml-window -lsfml-system
