@@ -32,7 +32,7 @@ void Game::preRound(std::string message) {
 	title.setFont(FONT);
 	title.setPosition(WINDOW->getSize().x / 2 - title.getGlobalBounds().width / 2, WINDOW->getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
 	title.setCharacterSize(30);
-	title.setFillColor(sf::Color::White);
+	title.setColor(sf::Color::White);
 
 	//Setup background
 	Sprite background(TEXTURE_GALAXY);
@@ -109,7 +109,7 @@ Player Game::startRound() {
 		while (WINDOW->pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				WINDOW->close();
-				return false;
+				return user1;
 			}
 		}
 

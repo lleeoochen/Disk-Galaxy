@@ -26,7 +26,7 @@ void Health::setPosition(sf::Vector2f position) {
 	greenBar.setPosition(position);
 }
 
-void Health::operator= (Health& otherHealth) {
+void Health::operator= (Health otherHealth) {
 	this->currentHealth = otherHealth.currentHealth;
 	this->maxHealth = otherHealth.maxHealth;
 }
