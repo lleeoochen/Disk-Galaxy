@@ -12,7 +12,14 @@ Player::Player(sf::Texture* texture) : Sprite(texture) {
 	deathTime = 0;
 	player_speed = 0.3f;
 	exploded = false;
+	scoreboard = NULL;
 	players.push_back(this);
+
+	nameText.setFont(FONT);
+	nameText.setCharacterSize(12);
+	nameText.setColor(sf::Color::White);
+	nameText.setString(name);
+	nameText.setOrigin(sf::Vector2f(nameText.getGlobalBounds().width / 2, nameText.getGlobalBounds().height / 2));
 }
 
 bool Player::exists() {
@@ -22,6 +29,8 @@ bool Player::exists() {
 void Player::draw() {
 	Sprite::draw();
 	health.draw();
+	nameText.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 30));
+	WINDOW->draw(nameText);
 
 	if (scoreboard != NULL) {
 		scoreboard->score = score;
@@ -29,9 +38,16 @@ void Player::draw() {
 	}
 }
 
+void Player::setName(std::string newName) {
+	name = newName;
+	nameText.setString(name);
+	nameText.setOrigin(sf::Vector2f(nameText.getGlobalBounds().width / 2, nameText.getGlobalBounds().height / 2));
+}
+
 void Player::setPosition(float x, float y) {
 	Sprite::setPosition(x, y);
 	health.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2 - 10));
+	nameText.setPosition(sf::Vector2f(this->getPosition().x, this->getPosition().y - this->height / 2));
 }
 
 void Player::setPositionRandom() {

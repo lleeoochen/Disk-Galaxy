@@ -92,10 +92,10 @@ Player Game::startRound() {
 	user1.trackScore(&scoreboard);
 
 	//Add enemies
-	user1.id = 0; user1.team = 0; user1.name = "Wei Tung";
-	robot1.id = 1; robot1.team = 0;
-	robot2.id = 2; robot2.team = 1;
-	robot3.id = 3; robot3.team = 1;
+	user1.id = 0;  user1.team = 0;  user1.setName("Wei Tung");
+	robot1.id = 1; robot1.team = 0; robot1.setName("Friend");
+	robot2.id = 2; robot2.team = 1; robot2.setName("Cute Enemy 1");
+	robot3.id = 3; robot3.team = 1; robot3.setName("Cute Enemy 2");
 
 	//Game loop
 	while (WINDOW->isOpen()) {

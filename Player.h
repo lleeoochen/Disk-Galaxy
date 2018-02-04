@@ -10,6 +10,7 @@ public:
 	Player(sf::Texture* texture);
 	bool exists();
 	void draw();
+	void setName(std::string newName);
 	void setPosition(float x, float y);
 	void setPositionRandom();
 	void fireAll();
@@ -34,4 +35,5 @@ public:
 	std::vector<Player*> flashes;
 	std::vector<Bullet> bullets;
 	static std::vector<Player*> players;
+	sf::Text nameText;
 };
