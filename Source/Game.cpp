@@ -32,7 +32,7 @@ void Game::preRound(std::string message) {
 	title.setFont(FONT);
 	title.setPosition(WINDOW->getSize().x / 2 - title.getGlobalBounds().width / 2, WINDOW->getSize().y * 1 / 4 - title.getGlobalBounds().height / 2);
 	title.setCharacterSize(30);
-	title.setColor(sf::Color::White);
+	title.setFillColor(sf::Color::White);
 
 	//Setup background
 	Sprite background(TEXTURE_GALAXY);

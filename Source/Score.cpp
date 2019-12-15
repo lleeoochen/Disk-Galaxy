@@ -9,7 +9,7 @@ Score::Score() {
 	text.setOrigin(text.getGlobalBounds().width / 2, text.getGlobalBounds().height / 2);
 	text.setPosition(background.getPosition().x + 20, background.getPosition().y + 10);
 	text.setCharacterSize(20);
-	text.setColor(sf::Color::White);
+	text.setFillColor(sf::Color::White);
 	score = 0;
 }
 

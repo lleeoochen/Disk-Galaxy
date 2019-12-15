@@ -17,7 +17,7 @@ Player::Player(sf::Texture* texture) : Sprite(texture) {
 
 	nameText.setFont(FONT);
 	nameText.setCharacterSize(12);
-	nameText.setColor(sf::Color::White);
+	nameText.setFillColor(sf::Color::White);
 	nameText.setString(name);
 	nameText.setOrigin(sf::Vector2f(nameText.getGlobalBounds().width / 2, nameText.getGlobalBounds().height / 2));
 }

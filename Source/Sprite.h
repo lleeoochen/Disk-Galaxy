@@ -2,6 +2,7 @@
 #include "Global.h"
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <cmath>
 
 class Sprite : public sf::Sprite {
 public:
